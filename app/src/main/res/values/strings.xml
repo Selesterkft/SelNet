@@ -1,9 +1,10 @@
 <resources>
-    <string name="root_url">http://185.187.72.228:8090/Service1.svc</string>
+    <string name="root_url">http://185.187.72.228:8092/Service1.svc</string>
     <string name="app_name">SelTransport</string>
     <string name="loginBtnUser">Belépés felhasználóként</string>
     <string name="loginWithCode">Belépés kóddal</string>
     <string name="username">Felhasználónév</string>
     <string name="password">Jelszó</string>
     <string name="code">Kód</string>
+    <string name="description">Megjegyzés</string>
 </resources>

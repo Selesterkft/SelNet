@@ -1,0 +1,80 @@
+package hu.selester.seltransport.Fragments
+
+import android.graphics.Color
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.PolyUtil
+import hu.selester.seltransport.Database.SelTransportDatabase
+import hu.selester.seltransport.Database.Tables.TransportDatasTable
+import hu.selester.seltransport.Objects.SessionClass
+import hu.selester.seltransport.R
+import kotlinx.android.synthetic.main.card_content.view.*
+import org.json.JSONObject
+
+class FullMapFragment: Fragment(), OnMapReadyCallback{
+
+    lateinit var mMap: GoogleMap
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val rootView = inflater.inflate(R.layout.frg_fullmap, container, false)
+        rootView.mapView.onCreate(null)
+        rootView.mapView.getMapAsync(this)
+        return rootView
+    }
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+        val db = SelTransportDatabase.getInstance(context!!)!!
+        val dataList = db.transportDatasDao().getAll(SessionClass.getValue("workCode")!!)
+        mMap = googleMap!!
+        mMap.uiSettings.setAllGesturesEnabled(true)
+
+        for(i in 0..(dataList.size-1)){
+            if(dataList[i].lat != 0.0 && dataList[i].lng != 0.0){
+                val coord = LatLng(dataList[i].lat,dataList[i].lng)
+                mMap.addMarker(MarkerOptions().position(coord).title(dataList[i].name))
+            }
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( LatLng(dataList[dataList.size-1].lat,dataList[dataList.size-1].lng) ,5f))
+
+
+/*
+        val path: MutableList<List<LatLng>> = ArrayList()
+        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=10.3181466,123.9029382&destination=10.311795,123.915864&key=AIzaSyDf4AnKue9H3jP1ozcGQOXAodccTgUYpIM"
+        val directionsRequest = object : StringRequest(
+            Request.Method.GET, urlDirections, Response.Listener<String> {
+                response ->
+            val jsonResponse = JSONObject(response)
+            // Get routes
+            val routes = jsonResponse.getJSONArray("routes")
+            val legs = routes.getJSONObject(0).getJSONArray("legs")
+            val steps = legs.getJSONObject(0).getJSONArray("steps")
+            for (i in 0 until steps.length()) {
+                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
+                path.add(PolyUtil.decode(points))
+            }
+            for (i in 0 until path.size) {
+                mMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+            }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( LatLng(10.311795,123.915864) ,22f))
+        }, Response.ErrorListener {
+                _ ->
+        }){}
+        val requestQueue = Volley.newRequestQueue(context)
+        requestQueue.add(directionsRequest)
+*/
+
+    }
+}

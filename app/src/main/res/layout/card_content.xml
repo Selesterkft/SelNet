@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:paddingTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+            app:cardCornerRadius="10dp"
+            android:id="@+id/cardContent"
+            android:background="@drawable/item_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true">
+        <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cameraZoom="2"
+                app:mapType="normal"
+                app:liteMode="true"
+        />
+        <LinearLayout
+                android:layout_marginTop="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:orientation="vertical">
+            <TextView
+                    android:id="@+id/card_content_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="[name]"/>
+            <TextView
+                    android:id="@+id/card_content_district"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="[District]"/>
+            <TextView
+                    android:id="@+id/card_content_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="[city]"/>
+            <TextView
+                    android:id="@+id/card_content_fulladdress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="[Addr Addr_ps_type Addr_housenr Addr_building Addr_stairway Addr_floor Addr_door]"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>
