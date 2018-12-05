@@ -8,6 +8,7 @@
     <color name="decorColor">#4cc5f3</color>
     <color name="whiteColor">#ffffff</color>
     <color name="ltGrayColor">#dfdfdf</color>
+    <color name="grayColor">#afafaf</color>
     <color name="decorDarkColor">#06193d</color>
     <color name="backOpacityColor">#55000000</color>
     <color name="itemListFullColor">#dfdfdf</color>
