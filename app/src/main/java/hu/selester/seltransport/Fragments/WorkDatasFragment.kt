@@ -88,6 +88,7 @@ class WorkDatasFragment : Fragment(){
             db.transportDatasDao().insert(TransportDatasTable(
                 null,
                 json.getString("LOGIN_CODE"),
+                SessionClass.getValue("ORD_L_ID")!!,
                 json.getInt("SeqNum"),
                 json.getInt("AddressTypes_ID"),
                 json.getInt("Addr_ID"),

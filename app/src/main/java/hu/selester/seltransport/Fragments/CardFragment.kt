@@ -12,13 +12,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.selester.seltransport.Database.Tables.TransportDatasTable
+import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
 import kotlinx.android.synthetic.main.card_content.view.*
 
 
 class CardFragment: Fragment(), OnMapReadyCallback{
 
-    lateinit var dataList: TransportDatasTable
+    lateinit var data: TransportDatasTable
     lateinit var rootView: View
     lateinit var mMap:GoogleMap
 
@@ -34,8 +35,8 @@ class CardFragment: Fragment(), OnMapReadyCallback{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if(arguments!!.get("data") != null){
-            dataList = arguments!!.get("data") as TransportDatasTable
-            Log.i("TAG",dataList.toString())
+            data = arguments!!.get("data") as TransportDatasTable
+            Log.i("TAG",data.toString())
         }
         super.onCreate(savedInstanceState)
     }
@@ -43,26 +44,30 @@ class CardFragment: Fragment(), OnMapReadyCallback{
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i("TAG","CRAETE VIEW")
         rootView = inflater.inflate(R.layout.card_content, container, false)
-        rootView.card_content_name.text         = dataList.name
-        rootView.card_content_district.text     = dataList.district
-        rootView.card_content_city.text         = dataList.city
-        rootView.card_content_fulladdress.text  = dataList.address
+        rootView.card_content_name.text         = data.name
+        rootView.card_content_district.text     = data.district
+        rootView.card_content_city.text         = data.city
+        rootView.card_content_fulladdress.text  = data.address
         rootView.mapView.onCreate(null)
         rootView.mapView.getMapAsync(this)
         rootView.cardContent.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,StatusFragment()).addToBackStack("app").commit()
+            SessionClass.setValue("choose_name",data.name)
+            SessionClass.setValue("choose_district",data.district)
+            SessionClass.setValue("choose_city",data.city)
+            SessionClass.setValue("choose_address",data.address)
+            SessionClass.setValue("choose_addressId",data.addressID.toString())
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransFragment()).addToBackStack("app").commit()
         }
-
         return rootView
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         Log.i("TAG","CRAETE MAP")
         mMap = googleMap
-        val coord = LatLng(dataList.lat, dataList.lng)
+        val coord = LatLng(data.lat, data.lng)
         mMap.uiSettings.isZoomControlsEnabled = false
         mMap.uiSettings.isMapToolbarEnabled = false
-        mMap.addMarker(MarkerOptions().position(coord).title(dataList.name))
+        mMap.addMarker(MarkerOptions().position(coord).title(data.name))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coord,12f))
     }
 

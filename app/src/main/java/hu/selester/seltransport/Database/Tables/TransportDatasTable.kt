@@ -9,6 +9,7 @@ import java.io.Serializable
 data class TransportDatasTable (
     @PrimaryKey(autoGenerate = true) var id: Long?,
     var loginCode: String,
+    var orderId: String,
     var seqNum: Int,
     var addressType: Int,
     var addressID: Int,
@@ -21,5 +22,5 @@ data class TransportDatasTable (
     var lat: Double,
     var lng: Double):Serializable{
 
-    constructor():this(null,"",0,0,0,"",0,"","","","", 0.0,0.0)
+    constructor():this(null,"","",0,0,0,"",0,"","","","", 0.0,0.0)
 }

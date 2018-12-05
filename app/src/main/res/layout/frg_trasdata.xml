@@ -1,111 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical">
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
               android:background="@color/colorPrimaryDark"
-              android:text = "Dokumentumkezelő"
+              android:text="Dokumentumkezelő"
               android:textColor="@color/whiteColor"
               android:padding="15dp"
               android:gravity="center_horizontal"
-              android:textSize="20sp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/blackColor"
-                    android:text="Dokumentum típusa:"/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/transdata_docTypeSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
+              android:textSize="20sp" android:id="@+id/textView" app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+            android:id="@+id/transdata_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
-        <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/camera"/>
-        <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/camera_folder"/>
-
-    </LinearLayout>
-    <HorizontalScrollView
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <TextView
+            android:id="@+id/transdata_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-            <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/temp_pic"
-                    android:paddingRight="10dp"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="@color/blackColor"
+            app:layout_constraintTop_toBottomOf="@+id/transdata_name" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
     <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/colorPrimaryDark"
             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
-            android:layout_margin="10dp">
+            android:layout_margin="8dp" android:id="@+id/textInputLayout4" tools:layout_editor_absoluteX="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/transdata_address">
         <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,9 +46,16 @@
                 android:maxLines="10"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/login_code"
+                android:id="@+id/transdata_description"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:layout_marginTop="8dp"/>
     </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+    <Button
+            android:id="@+id/transdata_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Elindultam" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
