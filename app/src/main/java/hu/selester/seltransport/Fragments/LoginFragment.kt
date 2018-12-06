@@ -24,7 +24,7 @@ class LoginFragment : Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = LayoutInflater.from(this.context).inflate(R.layout.frg_login, container, false)
+        rootView = LayoutInflater.from(context).inflate(R.layout.frg_login, container, false)
         rootView.login_version.text = "Verzió: " + BuildConfig.VERSION_NAME
         rootView.login_tabLayout.addTab(rootView.login_tabLayout.newTab().setIcon(R.drawable.tab_qr))
         rootView.login_tabLayout.addTab(rootView.login_tabLayout.newTab().setIcon(R.drawable.tab_login))
