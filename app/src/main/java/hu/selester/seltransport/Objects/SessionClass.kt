@@ -8,11 +8,11 @@ class SessionClass(){
         private val dataMap = mutableMapOf<String,String>()
 
         fun getValue(key:String): String?{
-            return dataMap.get(key)
+            return dataMap[key]
         }
 
         fun setValue(key:String, value: String){
-            dataMap.put(key, value)
+            dataMap[key] = value
         }
 
     }

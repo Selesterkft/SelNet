@@ -8,6 +8,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.media.ExifInterface
 import android.net.ConnectivityManager
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
@@ -26,6 +27,10 @@ class HelperClass(){
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val netInfo = cm.activeNetworkInfo
             return netInfo != null && netInfo.isConnectedOrConnecting
+        }
+
+        fun getAndroidID(context: Context): String {
+            return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         }
 
         fun getLatFromAddress(context: Context?, address: String): LatLng {

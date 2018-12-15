@@ -50,7 +50,7 @@ class WorkDatasFragment : Fragment(){
         if(HelperClass.isOnline(context!!)) {
             val code = SessionClass.getValue("ORD_L_ID")
             val url = resources.getString(R.string.root_url) + "/PDA_get_addressess/" + code
-            Log.i("TAG", url)
+            Log.i("URL", url)
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null,
                 Response.Listener { jsonRoot ->

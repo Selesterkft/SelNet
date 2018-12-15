@@ -9,10 +9,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import hu.selester.seltransport.Adapters.LoginAdapter
 import hu.selester.seltransport.BuildConfig
+import hu.selester.seltransport.Database.SelTransportDatabase
+import hu.selester.seltransport.Helper.HelperClass
+import hu.selester.seltransport.Helper.MySingleton
+import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
 import kotlinx.android.synthetic.main.frg_login.view.*
+import kotlinx.android.synthetic.main.frg_login_account.view.*
+import kotlinx.android.synthetic.main.frg_setting.view.*
+import org.json.JSONArray
+import java.lang.Exception
 
 
 class LoginFragment : Fragment(){
@@ -24,6 +35,7 @@ class LoginFragment : Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val db = SelTransportDatabase.getInstance(context!!)
         rootView = LayoutInflater.from(context).inflate(R.layout.frg_login, container, false)
         rootView.login_version.text = "Verzió: " + BuildConfig.VERSION_NAME
         rootView.login_tabLayout.addTab(rootView.login_tabLayout.newTab().setIcon(R.drawable.tab_qr))
@@ -55,13 +67,30 @@ class LoginFragment : Fragment(){
             override fun onPageSelected(p0: Int) {
             }
         })
+        rootView.login_setting.setOnClickListener { loadSettingPanel() }
+        if( db!!.systemDao().getValue("WSUrl") != null){
+            if( db!!.systemDao().getValue("WSUrl").equals("") ){
+                loadSettingPanel()
+            }
+            SessionClass.setValue("WSUrl", db.systemDao().getValue("WSUrl"))
+            SessionClass.setValue("terminal", db.systemDao().getValue("terminal"))
+        }else{
+            loadSettingPanel()
+        }
+
+
         return rootView
+    }
+
+    private fun loadSettingPanel(){
+        activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SettingsFragment()).addToBackStack("app").commit()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         activity!!.finish()
     }
+
 
 
 }

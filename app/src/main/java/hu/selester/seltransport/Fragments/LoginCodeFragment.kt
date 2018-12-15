@@ -52,7 +52,7 @@ class LoginCodeFragment : Fragment(){
     fun checkLoginParameter(){
         val code = rootView.login_code.text.toString()
         val url = resources.getString(R.string.root_url) + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN/" + code
-        Log.i("TAG",url)
+        Log.i("URL",url)
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url,null,
             Response.Listener { jsonRoot ->
                 val json = JSONObject(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRANResult") )

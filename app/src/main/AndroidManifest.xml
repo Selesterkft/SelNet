@@ -24,12 +24,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            android:largeHeap="true"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:largeHeap="true">
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyDf4AnKue9H3jP1ozcGQOXAodccTgUYpIM"/>
+                android:value="MAP-KEY-KEY"/>
         <provider
                 android:name=".Provider.GenericFileProvider"
                 android:authorities="${applicationId}.hu.selester.seltransport.provider"
@@ -39,7 +37,8 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_path"/>
         </provider>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
