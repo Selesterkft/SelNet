@@ -60,11 +60,35 @@ class LoginCodeFragment : Fragment(){
                     if (json.getInt("ERROR_CODE") == -1) {
                         SessionClass.setValue("workCode", code)
                         SessionClass.setValue("ORD_L_ID", json.getString("ORD_L_ID"))
+                        checkDOCMAN()
+                    } else {
+                        toast(context, json.getString("ERROR_TEXT"))
+                    }
+                }catch (e:Exception){
+                    e.printStackTrace()
+                    HelperClass.toast(context,"Hiba a kommunikációban!")
+                }
+            },
+            Response.ErrorListener { error ->
+                error.printStackTrace()
+            })
+        MySingleton.getInstance(context!!).addToRequestQueue(jsonObjectRequest)
+    }
+
+    private fun checkDOCMAN(){
+        val code = rootView.login_code.text.toString()
+        val url = resources.getString(R.string.root_url) + "/PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIX/1"
+        Log.i("URL",url)
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url,null,
+            Response.Listener { jsonRoot ->
+                try {
+                    val json = JSONObject(jsonRoot.getString("PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIXResult"))
+                    if (json.getInt("ERROR_CODE") == -1) {
                         LoadDocTypeThread(context).start()
                         activity!!.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
                     } else {
-                        toast(context, json.getString("ERROR_TEXT"))
+                        toast(context, json.getString("ERROR_TEXT"),10000)
                     }
                 }catch (e:Exception){
                     e.printStackTrace()

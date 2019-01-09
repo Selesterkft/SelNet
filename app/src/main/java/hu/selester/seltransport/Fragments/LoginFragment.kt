@@ -91,6 +91,4 @@ class LoginFragment : Fragment(){
         activity!!.finish()
     }
 
-
-
 }

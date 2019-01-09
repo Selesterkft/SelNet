@@ -27,7 +27,7 @@
             android:largeHeap="true">
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="MAP-KEY-KEY"/>
+                android:value="AIzaSyCf86rT3_Jc8Em6N7gFBZzvJ6u1qNsMMdo"/>
         <provider
                 android:name=".Provider.GenericFileProvider"
                 android:authorities="${applicationId}.hu.selester.seltransport.provider"

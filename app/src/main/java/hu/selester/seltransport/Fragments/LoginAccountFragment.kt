@@ -26,9 +26,12 @@ import hu.selester.seltransport.Helper.HelperClass
 import hu.selester.seltransport.Helper.MySingleton
 import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
+import hu.selester.seltransport.Threads.LoadDocTypeThread
 import kotlinx.android.synthetic.main.dialog_newversion.view.*
 import kotlinx.android.synthetic.main.frg_login_account.view.*
+import kotlinx.android.synthetic.main.frg_login_code.view.*
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.lang.Exception
 
@@ -53,7 +56,34 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
         rootView.login_btn.setOnClickListener {
             login()
         }
+        checkVersion()
         return rootView
+    }
+
+    private fun checkVersion(){
+        if(HelperClass.isOnline(context!!)) {
+            val url = SessionClass.getValue("WSUrl") + "/teszt_TRAN"
+            Log.i("URL", url)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                Response.Listener { jsonRoot ->
+                    try {
+                        val json = JSONObject(jsonRoot.getString("test_TRANResult"))
+                        if(json != null){
+                            val version = json.getDouble("VERS")
+                            if( version > BuildConfig.VERSION_NAME.toDouble() ){
+                                newVersionDialog(json.getString("DOWNLOAD_URL"))
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Log.i("TAG", error.printStackTrace().toString())
+                })
+            MySingleton.getInstance(context!!).addToRequestQueue(jsonObjectRequest)
+        }
     }
 
     private fun login(){
@@ -62,7 +92,7 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
             val account = rootView.login_account.text
             val password = rootView.login_password.text
             val androidID = HelperClass.getAndroidID(context!!)
-            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE/"+account+"/"+password+"/"+terminal+"/"+androidID
+            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE/"+account+"/"+password+"/"+terminal+"/"+androidID+"/0"
             Log.i("URL", url)
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null,
@@ -79,7 +109,7 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
                                 SessionClass.setValue("USER_ID",json.getJSONObject(0).getString("USER_ID"))
                                 SessionClass.setValue("USER_NAME",json.getJSONObject(0).getString("USER_NAME"))
                                 SessionClass.setValue("ACCOUNT",rootView.login_account.text.toString())
-                                activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransportsListFragment()).addToBackStack("app").commit()
+                                checkDOCMAN()
                             }
                         }else{
                             Toast.makeText(context!!,"Hibás felhasználó vagy jelszó!",Toast.LENGTH_LONG).show()
@@ -98,6 +128,29 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
         }else {
             Toast.makeText(context!!,"Hiba a kapcsolódáskor!",Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun checkDOCMAN(){
+        val url = resources.getString(R.string.root_url) + "/PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIX/1"
+        Log.i("URL",url)
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url,null,
+            Response.Listener { jsonRoot ->
+                try {
+                    val json = JSONObject(jsonRoot.getString("PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIXResult"))
+                    if (json.getInt("ERROR_CODE") == -1) {
+                        activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransportsListFragment()).addToBackStack("app").commit()
+                    } else {
+                        HelperClass.toast(context, json.getString("ERROR_TEXT"), 10000)
+                    }
+                }catch (e:Exception){
+                    e.printStackTrace()
+                    HelperClass.toast(context,"Hiba a kommunikációban!")
+                }
+            },
+            Response.ErrorListener { error ->
+                error.printStackTrace()
+            })
+        MySingleton.getInstance(context!!).addToRequestQueue(jsonObjectRequest)
     }
 
     private fun newVersionDialog(url: String) {
