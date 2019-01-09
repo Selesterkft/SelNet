@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -40,14 +41,13 @@ import hu.selester.seltransport.Database.Tables.PhotosTable
 import hu.selester.seltransport.Helper.HelperClass
 import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
+import hu.selester.seltransport.R.id.transphoto_btn
+import hu.selester.seltransport.Threads.UploadFilesThread
 import kotlinx.android.synthetic.main.dialog_show_image.view.*
 import kotlinx.android.synthetic.main.frg_trasphoto.view.*
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class TransPhotoFragment:Fragment(){
@@ -64,6 +64,7 @@ class TransPhotoFragment:Fragment(){
     val LOG_TAG = "TAG"
     var orderId = 0
     var attrId = 0
+    var goHandler: Boolean = true
 
 
     val listener = object : PhotosListAdapter.OnItemClickListener{
@@ -105,7 +106,10 @@ class TransPhotoFragment:Fragment(){
         val adapter = PhotosListAdapter(context as Context, db.photosDao().getPositionData( orderId, attrId ) as MutableList<PhotosTable>, listener)
         rootView.transphoto_list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         rootView.transphoto_list.adapter = adapter
-
+        rootView.transphoto_btn.setOnClickListener {
+            UploadFilesThread(context).start()
+            handler.postDelayed(runnable, 500)
+        }
         return rootView
     }
 
@@ -246,7 +250,7 @@ class TransPhotoFragment:Fragment(){
                                 selectedDocTypeName,
                                 timeStamp,
                                 mCurrentPhotoPath,
-                                false,
+                                0,
                                 0
                             )
                 db.photosDao().insert( item )
@@ -313,5 +317,38 @@ class TransPhotoFragment:Fragment(){
         }
         settingsDialog.setContentView(view)
         settingsDialog.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        photoListRefresh()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopPhotoListRefresh()
+    }
+
+    // ----------------------------- Loop refresh handler -----------------------------------------
+
+    var handler: Handler = Handler()
+    val runnable = Runnable { photoListRefresh() }
+
+    fun photoListRefresh() {
+        Log.i("TAG","handler")
+        (rootView.transphoto_list.adapter!! as PhotosListAdapter).refreshList(
+            db.photosDao().getPositionData(
+                orderId,
+                attrId
+            ) as MutableList<PhotosTable>
+        )
+        val uploadItems = db.photosDao().getBeUploadData(orderId,attrId).size
+        if( uploadItems > 0){
+            handler.postDelayed(runnable, 1000)
+        }
+    }
+
+    fun stopPhotoListRefresh(){
+        handler.removeCallbacks(runnable)
     }
 }

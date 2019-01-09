@@ -1,6 +1,5 @@
 package hu.selester.seltransport.Fragments
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -22,21 +20,15 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.google.zxing.integration.android.IntentIntegrator
 import hu.selester.seltransport.AsyncTask.DownloadNewVersion
 import hu.selester.seltransport.BuildConfig
 import hu.selester.seltransport.Helper.HelperClass
-import hu.selester.seltransport.Helper.HelperClass.Companion.toast
 import hu.selester.seltransport.Helper.MySingleton
 import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
 import kotlinx.android.synthetic.main.dialog_newversion.view.*
-import kotlinx.android.synthetic.main.frg_login.*
-import kotlinx.android.synthetic.main.frg_login.view.*
 import kotlinx.android.synthetic.main.frg_login_account.view.*
-import kotlinx.android.synthetic.main.frg_login_code.view.*
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 import java.lang.Exception
 
@@ -69,7 +61,8 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
             val terminal = SessionClass.getValue("terminal")
             val account = rootView.login_account.text
             val password = rootView.login_password.text
-            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE/"+account+"/"+password+"/"+terminal+"/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE"
+            val androidID = HelperClass.getAndroidID(context!!)
+            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE/"+account+"/"+password+"/"+terminal+"/"+androidID
             Log.i("URL", url)
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null,

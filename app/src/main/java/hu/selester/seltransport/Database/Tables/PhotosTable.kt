@@ -12,8 +12,8 @@ data class PhotosTable(
     var ptypeText: String,
     var datetime: String,
     var filePath: String,
-    var uploaded: Boolean,
+    var uploaded: Int,
     var tried: Int
     ){
-    constructor():this(null,0,0,0,"","","",false,0)
+    constructor():this(null,0,0,0,"","","",0,0)
 }

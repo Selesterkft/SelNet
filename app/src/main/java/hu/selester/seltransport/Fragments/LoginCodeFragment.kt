@@ -44,7 +44,7 @@ class LoginCodeFragment : Fragment(){
         rootView.login_codeBtn.setOnClickListener {
             checkLoginParameter()
         }
-        rootView.login_code.setText( "016E9A59" )
+        rootView.login_code.setText( "2D9512F2" )
         rootView.qrBtn.setOnClickListener { loadQR() }
         return rootView
     }
@@ -55,14 +55,20 @@ class LoginCodeFragment : Fragment(){
         Log.i("URL",url)
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url,null,
             Response.Listener { jsonRoot ->
-                val json = JSONObject(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRANResult") )
-                if( json.getInt("ERROR_CODE") == -1 ){
-                    SessionClass.setValue("workCode",code)
-                    SessionClass.setValue("ORD_L_ID",json.getString("ORD_L_ID"))
-                    LoadDocTypeThread(context).start()
-                    activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, WorkDatasFragment() ).addToBackStack("App").commit()
-                }else{
-                    toast(context,json.getString("ERROR_TEXT"))
+                try {
+                    val json = JSONObject(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRANResult"))
+                    if (json.getInt("ERROR_CODE") == -1) {
+                        SessionClass.setValue("workCode", code)
+                        SessionClass.setValue("ORD_L_ID", json.getString("ORD_L_ID"))
+                        LoadDocTypeThread(context).start()
+                        activity!!.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
+                    } else {
+                        toast(context, json.getString("ERROR_TEXT"))
+                    }
+                }catch (e:Exception){
+                    e.printStackTrace()
+                    HelperClass.toast(context,"Hiba a kommunikációban!")
                 }
             },
             Response.ErrorListener { error ->

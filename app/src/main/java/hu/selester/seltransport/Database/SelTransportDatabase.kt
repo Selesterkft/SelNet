@@ -13,7 +13,7 @@ import hu.selester.seltransport.Database.Tables.PhotosTable
 import hu.selester.seltransport.Database.Tables.SystemTable
 import hu.selester.seltransport.Database.Tables.TransportDatasTable
 
-@Database(entities = [TransportDatasTable::class, PhotosTable::class, DocsTypeTable::class, SystemTable::class], version = 10)
+@Database(entities = [TransportDatasTable::class, PhotosTable::class, DocsTypeTable::class, SystemTable::class], version = 11)
 abstract class SelTransportDatabase: RoomDatabase() {
 
     abstract fun transportDatasDao ()   : TransportDatasDao

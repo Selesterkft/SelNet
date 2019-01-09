@@ -1,7 +1,9 @@
 package hu.selester.seltransport.Adapters
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
@@ -39,7 +41,18 @@ class PhotosListAdapter(private var context: Context, val dataList: MutableList<
         holder.name.text = dataList[position].ptypeText
         holder.datetime.text = dataList[position].datetime
         holder.image.setImageBitmap(HelperClass.loadLocalImage(dataList[position].filePath,20) )
-        holder.delBtn.setOnClickListener { listener.onDelQuestion (position) }
+        var image: Drawable = context.getDrawable(R.drawable.red_bin)
+        when(dataList[position].uploaded){
+            1 -> {
+                    image = context.getDrawable(R.drawable.uploading)
+                    holder.delBtn.setOnClickListener { listener.onDelQuestion (position) }
+                 }
+            2 -> image = context.getDrawable(R.drawable.uploaded)
+            3 -> image = context.getDrawable(R.drawable.errorupload)
+        }
+        holder.delBtn.setImageDrawable(image)
+
+
         holder.image.setOnClickListener {
             listener.onItemClick(dataList[position].filePath)
         }
@@ -54,7 +67,13 @@ class PhotosListAdapter(private var context: Context, val dataList: MutableList<
     }
 
     fun addItem(item: PhotosTable){
-        dataList.add(item)
+        dataList.add(0,item)
+        notifyDataSetChanged()
+    }
+
+    fun refreshList(newList: MutableList<PhotosTable>){
+        dataList.clear()
+        dataList.addAll(newList)
         notifyDataSetChanged()
     }
 }
