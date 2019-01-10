@@ -90,7 +90,7 @@ class SettingsFragment: Fragment(){
                 Request.Method.GET, url, null,
                 Response.Listener { jsonRoot ->
                     try {
-                        val json = JSONArray(jsonRoot.getString("test_TRANResult"))
+                        val json = JSONObject(jsonRoot.getString("test_TRANResult"))
                         if(json != null){
                             rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_acc,null))
                             if( rootView.setting_terminal.text.toString().equals("") ){
