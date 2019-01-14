@@ -1,32 +1,25 @@
 package hu.selester.seltransport.Fragments
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.zxing.integration.android.IntentIntegrator
-import hu.selester.seltransport.BuildConfig
-import hu.selester.seltransport.Database.Tables.TransportDatasTable
 import hu.selester.seltransport.Helper.HelperClass
 import hu.selester.seltransport.Helper.HelperClass.Companion.toast
 import hu.selester.seltransport.Helper.MySingleton
 import hu.selester.seltransport.Objects.SessionClass
 import hu.selester.seltransport.R
 import hu.selester.seltransport.Threads.LoadDocTypeThread
-import kotlinx.android.synthetic.main.frg_login.*
-import kotlinx.android.synthetic.main.frg_login.view.*
 import kotlinx.android.synthetic.main.frg_login_code.view.*
+import org.json.JSONArray
 import org.json.JSONObject
 
 class LoginCodeFragment : Fragment(){
@@ -44,7 +37,7 @@ class LoginCodeFragment : Fragment(){
         rootView.login_codeBtn.setOnClickListener {
             checkLoginParameter()
         }
-        rootView.login_code.setText( "2D9512F2" )
+        //rootView.login_code.setText( "5DCD23A1" )
         rootView.qrBtn.setOnClickListener { loadQR() }
         return rootView
     }
@@ -57,6 +50,7 @@ class LoginCodeFragment : Fragment(){
             Response.Listener { jsonRoot ->
                 try {
                     val json = JSONObject(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRANResult"))
+                    Log.i("TAG",jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRANResult"))
                     if (json.getInt("ERROR_CODE") == -1) {
                         SessionClass.setValue("workCode", code)
                         SessionClass.setValue("ORD_L_ID", json.getString("ORD_L_ID"))
@@ -82,7 +76,8 @@ class LoginCodeFragment : Fragment(){
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url,null,
             Response.Listener { jsonRoot ->
                 try {
-                    val json = JSONObject(jsonRoot.getString("PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIXResult"))
+                    val jsonText = jsonRoot.getString("PDA_TRANSPORT_GET_DOCMAN_TABLE_PREFIXResult")
+                    val json = JSONObject(jsonText)
                     if (json.getInt("ERROR_CODE") == -1) {
                         LoadDocTypeThread(context).start()
                         activity!!.supportFragmentManager.beginTransaction()

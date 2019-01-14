@@ -56,6 +56,8 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
         rootView.login_btn.setOnClickListener {
             login()
         }
+        //rootView.login_account.setText("oj")
+        //rootView.login_password.setText("Creative77")
         checkVersion()
         return rootView
     }
@@ -92,27 +94,29 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
             val account = rootView.login_account.text
             val password = rootView.login_password.text
             val androidID = HelperClass.getAndroidID(context!!)
-            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMLOYEE/"+account+"/"+password+"/"+terminal+"/"+androidID+"/0"
+            val url = SessionClass.getValue("WSUrl") + "/WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMPLOYEE/"+account+"/"+password+"/"+terminal+"/"+androidID+"/0"
             Log.i("URL", url)
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET, url, null,
                 Response.Listener { jsonRoot ->
                     try {
-                        val json = JSONArray(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMPLOYEE_Result"))
-                        if(json != null){
-                            val version = json.getJSONObject(0).getDouble("Version")
-                            if( version > BuildConfig.VERSION_NAME.toDouble() ){
-                                newVersionDialog(json.getJSONObject(0).getString("DOWNLOAD_URL"))
-                            }else{
-                                SessionClass.setValue("ORD_NUM",json.getJSONObject(0).getString("ORD_NUM"))
-                                SessionClass.setValue("LOGIN_CODE",json.getJSONObject(0).getString("LOGIN_CODE"))
-                                SessionClass.setValue("USER_ID",json.getJSONObject(0).getString("USER_ID"))
-                                SessionClass.setValue("USER_NAME",json.getJSONObject(0).getString("USER_NAME"))
-                                SessionClass.setValue("ACCOUNT",rootView.login_account.text.toString())
+                        val json = JSONObject(jsonRoot.getString("WEB_REASTAPI_USERVALIDATE_LOG_IN_TRAN_EMPLOYEE_Result"))
+                        if(json != null) {
+                            try {
+                                if( json.getString("ERROR_CODE") != null ){
+                                    Toast.makeText(context!!, "Hibás felhasználó vagy jelszó!", Toast.LENGTH_LONG).show()
+                                }
+                            } catch (e: Exception) {
+
+                                SessionClass.setValue("USER_ID", json.getString("ID"))
+                                SessionClass.setValue("USER_NAME", json.getString("Name"))
+                                SessionClass.setValue("ACCOUNT", rootView.login_password.text.toString())
+                                SessionClass.setValue("PASSWORD", rootView.login_account.text.toString())
                                 checkDOCMAN()
+                                e.printStackTrace()
                             }
                         }else{
-                            Toast.makeText(context!!,"Hibás felhasználó vagy jelszó!",Toast.LENGTH_LONG).show()
+                            Toast.makeText(context!!, "Hibás felhasználó vagy jelszó!", Toast.LENGTH_LONG).show()
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
