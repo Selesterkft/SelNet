@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+    <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/login_logo_btn"
+            android:layout_gravity="center_vertical"/>
     <TextView
             android:id="@+id/row_transport_list_ordernum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="5dp"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_marginLeft="40dp"
     />
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

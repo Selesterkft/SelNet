@@ -83,10 +83,9 @@ class TransportsListFragment:Fragment(), TransportListAdapter.RowClickListener{
                     if(jsonText.substring(0,1) == "["){
                         val json = JSONArray(jsonText)
                         var dataList = mutableListOf<OrderNums>()
-                        for(i in 1..(json.length()-1)){
+                        for(i in 0..(json.length()-1)){
                             dataList.add(OrderNums(null,json.getJSONObject(i).getString("LOGIN_CODE"),json.getJSONObject(i).getString("ORD_NUM")))
                         }
-
                         val adapter = TransportListAdapter(context!!,dataList, this)
                         rootView.transports_list_orderList.adapter = adapter
                     }else{

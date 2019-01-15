@@ -104,7 +104,13 @@ class LoginAccountFragment : Fragment(), DownloadNewVersion.AsyncResponse{
                         if(json != null) {
                             try {
                                 if( json.getString("ERROR_CODE") != null ){
-                                    Toast.makeText(context!!, "Hibás felhasználó vagy jelszó!", Toast.LENGTH_LONG).show()
+                                    when {
+                                        json.getString("ERROR_CODE") == "1001" -> Toast.makeText(context!!, "Terminal megadása kötelező.", Toast.LENGTH_LONG).show()
+                                        json.getString("ERROR_CODE") == "1002" -> Toast.makeText(context!!, "Adja meg a felhasználó kódját.", Toast.LENGTH_LONG).show()
+                                        json.getString("ERROR_CODE") == "1003" -> Toast.makeText(context!!, "Hibás felhasználó vagy jelszó.", Toast.LENGTH_LONG).show()
+                                        json.getString("ERROR_CODE") == "1004" -> Toast.makeText(context!!, "A rendszer nem engedte be, mert túllépte a megvásárolt felhasználói keretet. Léptessen ki valakit a rendszerböl.", Toast.LENGTH_LONG).show()
+                                        else -> Toast.makeText(context!!, "Hibás felhasználó vagy jelszó!", Toast.LENGTH_LONG).show()
+                                    }
                                 }
                             } catch (e: Exception) {
 
