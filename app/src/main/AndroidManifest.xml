@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="hu.selester.seltransport">
+          package="hu.selester.selnet">
 
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -10,11 +12,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-feature android:name="android.hardware.camera" android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
 
 
     <application
@@ -29,15 +31,22 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyCf86rT3_Jc8Em6N7gFBZzvJ6u1qNsMMdo"/>
         <provider
-                android:name=".Provider.GenericFileProvider"
-                android:authorities="${applicationId}.hu.selester.seltransport.provider"
+                android:name="hu.selester.selnet.Provider.GenericFileProvider"
+                android:authorities="${applicationId}.hu.selester.selnet.provider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_path"/>
         </provider>
-        <activity android:name=".MainActivity"
+        <receiver android:name="hu.selester.selnet.Receiver.SmsIncomingReceiver"
+                  android:enabled="true"
+                  android:exported="true">
+            <intent-filter android:priority="997">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <activity android:name="hu.selester.selnet.MainActivity"
                   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

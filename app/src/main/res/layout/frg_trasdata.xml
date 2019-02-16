@@ -32,40 +32,32 @@
             android:textColor="@color/blackColor"
             app:layout_constraintTop_toBottomOf="@+id/transdata_name" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
-    <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/colorPrimaryDark"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
-            android:layout_margin="8dp" android:id="@+id/textInputLayout4"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/transdata_address"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp">
-        <android.support.v7.widget.AppCompatEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/description"
-                android:maxLines="10"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/transdata_description"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:layout_marginTop="8dp"/>
-    </android.support.design.widget.TextInputLayout>
 
-    <WebView
-            android:id="@+id/login_webview"
+
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
-            app:layout_constraintBottom_toTopOf="@+id/transdata_btn"
+            app:layout_constraintTop_toBottomOf="@+id/transdata_address"
+            app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+                android:id="@+id/transdata_components"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <WebView
+                    android:id="@+id/login_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+            />
+            <TextView android:id='@+id/transdata_expandBtn' android:layout_margin="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Bővebben >>"/>
+        </LinearLayout>
+    </ScrollView>
+    <ImageView
+            android:id="@+id/transdata_exit"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/but_cancel_44x44"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="5dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="5dp"
     />
-
-    <Button
-            android:id="@+id/transdata_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/routetext" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
     </android.support.constraint.ConstraintLayout>

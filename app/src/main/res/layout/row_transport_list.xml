@@ -14,7 +14,7 @@
             android:src="@drawable/login_logo_btn"
             android:layout_gravity="center_vertical"/>
     <TextView
-            android:id="@+id/row_transport_list_ordernum"
+            android:id="@+id/row_transport_list_maintext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
