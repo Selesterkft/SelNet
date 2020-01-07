@@ -1,19 +1,21 @@
 package hu.selester.selnet.Adapters
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.annotation.SuppressLint
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentManager
 import hu.selester.selnet.Fragments.LoginAccountFragment
 import hu.selester.selnet.Fragments.LoginCodeFragment
 
-class LoginAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
+@SuppressLint("WrongConstant")
+class LoginAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    override fun getItem(position: Int): Fragment? {
-        when(position){
+    override fun getItem(position: Int): Fragment {
+        when (position) {
             0 -> return LoginCodeFragment.newInstance()
             1 -> return LoginAccountFragment.newInstance()
         }
-        return null
+        return Fragment()
     }
 
     override fun getCount(): Int {

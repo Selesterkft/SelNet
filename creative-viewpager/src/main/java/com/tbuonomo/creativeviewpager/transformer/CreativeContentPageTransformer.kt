@@ -1,7 +1,7 @@
 package com.tbuonomo.creativeviewpager.transformer
 
-import android.support.v4.view.ViewPager
 import android.view.View
+import androidx.viewpager.widget.ViewPager
 
 class CreativeContentPageTransformer(private val contentWidthPadding: Float) : ViewPager.PageTransformer {
 

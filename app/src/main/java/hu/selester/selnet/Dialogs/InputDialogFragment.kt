@@ -2,22 +2,18 @@ package hu.selester.selnet.Dialogs
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.google.zxing.integration.android.IntentIntegrator
 import hu.selester.selnet.Fragments.TransPhotoFragment
 import hu.selester.selnet.Helper.HelperClass
 import hu.selester.selnet.Helper.KeyboardUtils
 import hu.selester.selnet.R
 import kotlinx.android.synthetic.main.dialog_inputbox.view.*
-
-
-
-
 
 class InputDialogFragment: DialogFragment(){
 
@@ -34,7 +30,7 @@ class InputDialogFragment: DialogFragment(){
             activity!!.windowManager.defaultDisplay.getMetrics(displaymetrics)
             val screenWidth = displaymetrics.widthPixels
             val screenHeight = displaymetrics.heightPixels
-            dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, screenHeight)
+            dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, screenHeight)
             KeyboardUtils.hideKeyboard(activity!!)
         }
         return rootView
@@ -54,7 +50,7 @@ class InputDialogFragment: DialogFragment(){
     override fun onStart() {
         super.onStart()
 
-        dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

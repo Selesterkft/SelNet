@@ -2,10 +2,10 @@ package hu.selester.selnet.Adapters
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import hu.selester.selnet.Database.Tables.PhotosTable
 import hu.selester.selnet.Helper.HelperClass
 import hu.selester.selnet.R
@@ -18,7 +18,7 @@ class PhotosListAdapter(private var context: Context, val dataList: MutableList<
         fun onDelQuestion( item: Int)
     }
 
-    class ViewHolder(view: View):RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         var name = view.photos_list_text
         var image = view.photos_list_image
         var datetime = view.photos_list_date

@@ -2,8 +2,8 @@ package com.tbuonomo.creativeviewpager
 
 import android.graphics.Bitmap
 import android.os.AsyncTask
-import android.support.v7.graphics.Palette
 import android.util.LruCache
+import androidx.palette.graphics.Palette
 import com.tbuonomo.creativeviewpager.adapter.CreativePagerAdapter
 import java.util.concurrent.ConcurrentHashMap
 

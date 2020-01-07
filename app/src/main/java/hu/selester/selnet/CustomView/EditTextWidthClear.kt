@@ -3,15 +3,16 @@ package hu.selester.selnet.CustomView
 import android.text.Editable
 import android.text.TextWatcher
 import android.content.Context
-import android.support.v4.content.res.ResourcesCompat
 import android.view.MotionEvent
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.res.ResourcesCompat
 import hu.selester.selnet.R
 
 
-class EditTextWithClear : android.support.v7.widget.AppCompatEditText {
+class EditTextWithClear : AppCompatEditText {
 
     internal var mClearButtonImage: Drawable? = null
 

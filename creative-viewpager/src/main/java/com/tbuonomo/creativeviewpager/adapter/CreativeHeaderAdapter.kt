@@ -1,22 +1,21 @@
 package com.tbuonomo.creativeviewpager.adapter
 
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.Guideline
-import android.support.v7.widget.RecyclerView.Adapter
-import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Guideline
+import androidx.recyclerview.widget.RecyclerView
 import com.tbuonomo.creativeviewpager.CreativeViewPager.Companion.SCALE_MIN
 import com.tbuonomo.creativeviewpager.R
 import com.tbuonomo.creativeviewpager.adapter.CreativeHeaderAdapter.PagerImageViewHolder
 
 class CreativeHeaderAdapter(val parent: ViewGroup,
-        private val verticalGuideline: Guideline,
-        private val imagesSize: Float, private val imagesMargin: Float,
-        private val onImageClick: ((Int) -> Unit)) :
-        Adapter<PagerImageViewHolder>() {
+                            private val verticalGuideline: Guideline,
+                            private val imagesSize: Float, private val imagesMargin: Float,
+                            private val onImageClick: ((Int) -> Unit)) :
+        RecyclerView.Adapter<PagerImageViewHolder>() {
 
   var creativePagerAdapter: CreativePagerAdapter? = null
 
@@ -62,5 +61,5 @@ class CreativeHeaderAdapter(val parent: ViewGroup,
     holder.itemView.setOnClickListener { onImageClick(holder.adapterPosition) }
   }
 
-  class PagerImageViewHolder(itemView: View) : ViewHolder(itemView)
+  class PagerImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

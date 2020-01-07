@@ -6,9 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.Fragment
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +14,14 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import com.android.volley.BuildConfig
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import hu.selester.selnet.AsyncTask.DownloadNewVersion
-import hu.selester.selnet.BuildConfig
 import hu.selester.selnet.Helper.HelperClass
 import hu.selester.selnet.Helper.MySingleton
 import hu.selester.selnet.Objects.SessionClass

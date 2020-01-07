@@ -1,12 +1,12 @@
 package hu.selester.selnet.Fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -25,7 +25,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
 
-class TransportsListFragment:Fragment(), TransportListAdapter.RowClickListener{
+class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
 
     lateinit var rootView: View
     var db: SelTransportDatabase? = null

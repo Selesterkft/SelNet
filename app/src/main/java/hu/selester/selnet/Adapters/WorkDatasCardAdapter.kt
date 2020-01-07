@@ -1,16 +1,19 @@
 package hu.selester.selnet.Adapters
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import hu.selester.selnet.Database.Tables.TasksTable
 import hu.selester.selnet.Fragments.CardFragment
 
-class WorkDatasCardAdapter(fragmentManager: FragmentManager, private var dataList: List<TasksTable>): FragmentPagerAdapter(fragmentManager) {
+class WorkDatasCardAdapter(
+    fragmentManager: FragmentManager,
+    private var dataList: List<TasksTable>
+) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): Fragment {
-        Log.i("TAG","FRG Num: "+position.toString())
+        Log.i("TAG", "FRG Num: " + position.toString())
         return CardFragment.newInstance(dataList[position])
     }
 
