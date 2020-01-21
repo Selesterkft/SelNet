@@ -37,8 +37,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.zxing:core:3.3.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    kapt 'android.arch.persistence.room:compiler:1.1.1'
-    implementation 'androidx.room:room-runtime:2.2.3'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -47,4 +45,8 @@ dependencies {
     implementation 'com.cheekiat:indicatorsteplib:1.9'
     implementation 'com.hbb20:ccp:2.2.3'
     implementation 'com.kyanogen.signatureview:signature-view:1.0'
+
+    def room_version = "2.2.3"
+    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
 }

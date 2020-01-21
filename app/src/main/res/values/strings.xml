@@ -20,4 +20,8 @@
     <string name="district_placeholder">[District]</string>
     <string name="city_placeholder">[city]</string>
     <string name="addr_placeholder">[Addr Addr_ps_type Addr_housenr Addr_building Addr_stairway Addr_floor Addr_door]</string>
+    <string name="name">Átvevő név:</string>
+    <string name="address">Cím:</string>
+    <string name="tel_num">Telefon:</string>
+    <string name="signature">Aláírás:</string>
 </resources>

@@ -5,24 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.kyanogen.signatureview.SignatureView
-            android:id="@+id/signature_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            app:backgroundColor="#ffffff"
-            app:enableSignature="true"
-            app:layout_constraintBottom_toTopOf="@+id/signiture_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:penColor="#000000"
-            app:penSize="5dp" />
-
     <Button
             android:id="@+id/signature_clear"
             android:layout_width="0dp"
@@ -54,4 +36,137 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
+    <EditText
+            android:id="@+id/static_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:focusable="false"
+            android:inputType="none"
+            android:text="@string/name"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+            android:id="@+id/static_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:focusable="false"
+            android:inputType="none"
+            android:text="@string/address"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/static_name" />
+
+    <EditText
+            android:id="@+id/static_tel_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:focusable="false"
+            android:inputType="none"
+            android:text="@string/tel_num"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/static_address" />
+
+
+    <EditText
+            android:id="@+id/static_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="6dp"
+            android:background="@null"
+            android:focusable="false"
+            android:inputType="none"
+            android:text="@string/signature"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/innerLayout"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    <EditText
+            android:id="@+id/name_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="@+id/static_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/static_name"
+            app:layout_constraintTop_toTopOf="@+id/static_name" />
+
+    <EditText
+            android:id="@+id/address_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:ems="10"
+            android:inputType="textPostalAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/static_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/static_address"
+            app:layout_constraintTop_toTopOf="@+id/static_address" />
+
+    <EditText
+            android:id="@+id/tel_num_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:ems="10"
+            android:inputType="number|phone"
+            app:layout_constraintBottom_toBottomOf="@+id/static_tel_num"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/static_tel_num"
+            app:layout_constraintTop_toTopOf="@+id/static_tel_num" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/innerLayout"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="#00BCD4"
+            app:layout_constraintBottom_toTopOf="@+id/signiture_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <com.kyanogen.signatureview.SignatureView
+                android:id="@+id/signature_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                app:backgroundColor="#ffffff"
+                app:enableSignature="true"
+                app:layout_constraintBottom_toBottomOf="@id/innerLayout"
+                app:layout_constraintEnd_toEndOf="@id/innerLayout"
+                app:layout_constraintStart_toStartOf="@id/innerLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:penColor="#000000"
+                app:penSize="5dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
