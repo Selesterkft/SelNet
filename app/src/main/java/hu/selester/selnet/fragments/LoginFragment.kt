@@ -59,7 +59,7 @@ class LoginFragment : Fragment(){
         })
         rootView.login_setting.setOnClickListener { loadSettingPanel() }
         if( db!!.systemDao().getValue("WSUrl") != null){
-            if( db.systemDao().getValue("WSUrl").equals("") ){
+            if(db.systemDao().getValue("WSUrl") == ""){
                 loadSettingPanel()
             }
             SessionClass.setValue("WSUrl", db.systemDao().getValue("WSUrl"))

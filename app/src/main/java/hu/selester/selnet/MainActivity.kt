@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import hu.selester.selnet.database.SelTransportDatabase
 import hu.selester.selnet.fragments.SignatureFragment
 import hu.selester.selnet.fragments.VerifyLoginFragment
+import hu.selester.selnet.objects.SessionClass
 
 class MainActivity : AppCompatActivity() {
 
     val TAG = "TAG"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SessionClass.setValue("WSUrl", getString(R.string.root_url))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

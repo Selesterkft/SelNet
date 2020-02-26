@@ -1,5 +1,5 @@
 <resources>
-    <string name="root_url">http://185.187.72.228:8092/Service1.svc</string>
+    <string name="root_url">https://web-restapi-services-01-dr5.conveyor.cloud/Service1.svc</string>
     <string name="app_name">SelTransport</string>
     <string name="loginBtnUser">Belépés felhasználóként</string>
     <string name="loginWithCode">Belépés kóddal</string>

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class VerifyLoginFragment : Fragment() {
 
     lateinit var rootView: View
     var loopNum = 0
-    val loopTimeSec: Long = 5000
+    val loopTimeSec: Long = 15000
     val MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 103
     val TAG = "TAG"
 
@@ -37,7 +38,6 @@ class VerifyLoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        SessionClass.setValue("WSUrl", "http://185.187.72.228:8092/service1.svc")
         rootView = inflater.inflate(R.layout.frg_verify_login, container, false)
         if (HelperClass.getSharedPreferences(context!!, "verifyID") == "") {
             HelperClass.setSharedPreferences(activity!!, "logged", "0")
@@ -112,24 +112,22 @@ class VerifyLoginFragment : Fragment() {
                     try {
                         Log.i("TAG", jsonRoot.toString())
                         val json = JSONObject(jsonRoot.getString("PDA_SMS_REGResult"))
-                        if (json != null) {
-                            if (json.getInt("ERROR_CODE") == -1) {
-                                if (json.getString("MESSAGE") == HelperClass.getSharedPreferences(
-                                        context!!,
-                                        "verifyID"
-                                    )
-                                ) {
-                                    activity!!.supportFragmentManager.beginTransaction()
-                                        .replace(R.id.fragment_container, TransportsListFragment())
-                                        .addToBackStack("app").commit()
-                                }
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Hiba az azonosítás közben!\nKérem próbálja meg újból!",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                        if (json.getInt("ERROR_CODE") == -1) {
+                            if (json.getString("MESSAGE") == HelperClass.getSharedPreferences(
+                                    context!!,
+                                    "verifyID"
+                                )
+                            ) {
+                                activity!!.supportFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, TransportsListFragment())
+                                    .addToBackStack("app").commit()
                             }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Hiba az azonosítás közben!\nKérem próbálja meg újból!",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()

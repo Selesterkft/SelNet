@@ -1,5 +1,6 @@
 package hu.selester.selnet.helper
 
+import android.util.Log
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -78,11 +79,16 @@ constructor(url: URL) {
         writer.append(LINE_FEED)
         writer.flush()
 
-        val inputStream = FileInputStream(uploadFile)
-        inputStream.copyTo(outputStream, maxBufferSize)
+        try {
+            val inputStream = FileInputStream(uploadFile)
+            inputStream.copyTo(outputStream, maxBufferSize)
+            outputStream.flush()
+            inputStream.close()
+        }
+        catch ( e: FileNotFoundException ) {
+            Log.i("Multipart::addFilePart", "File was not found")
+        }
 
-        outputStream.flush()
-        inputStream.close()
         writer.append(LINE_FEED)
         writer.flush()
     }
@@ -94,7 +100,7 @@ constructor(url: URL) {
      * @param value - value of the header field
      */
     fun addHeaderField(name: String, value: String) {
-        writer.append(name + "=\"" + value +"\"").append(LINE_FEED)
+        writer.append("$name=\"$value\"").append(LINE_FEED)
         writer.flush()
     }
 

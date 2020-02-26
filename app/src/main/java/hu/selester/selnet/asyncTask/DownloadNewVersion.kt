@@ -57,7 +57,7 @@ class DownloadNewVersion(var delegate: AsyncResponse, private val pb: ProgressBa
 
         } catch (e: Exception) {
 
-            println("exception in DownloadFile: --------" + e.toString())
+            println("exception in DownloadFile: --------$e")
             e.printStackTrace()
             return 1
         }

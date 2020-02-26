@@ -58,7 +58,7 @@ class LoginCodeFragment : Fragment(){
                     }
                 }catch (e:Exception){
                     e.printStackTrace()
-                    HelperClass.toast(context,"Hiba a kommunikációban!")
+                    toast(context,"Hiba a kommunikációban!")
                 }
             },
             Response.ErrorListener { error ->
@@ -84,7 +84,7 @@ class LoginCodeFragment : Fragment(){
                     }
                 }catch (e:Exception){
                     e.printStackTrace()
-                    HelperClass.toast(context,"Hiba a kommunikációban!")
+                    toast(context,"Hiba a kommunikációban!")
                 }
             },
             Response.ErrorListener { error ->

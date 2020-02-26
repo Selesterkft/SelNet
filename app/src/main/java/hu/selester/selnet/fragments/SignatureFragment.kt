@@ -1,13 +1,12 @@
 package hu.selester.selnet.fragments
 
-import android.graphics.Bitmap
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import hu.selester.selnet.R
 import hu.selester.selnet.database.SelTransportDatabase
+import hu.selester.selnet.database.tables.PhotosTable
 import hu.selester.selnet.database.tables.SignaturesTable
+import hu.selester.selnet.threads.UploadFilesThread
 import kotlinx.android.synthetic.main.dialog_signiture.view.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.lang.Exception
+import java.io.*
 
 
 class SignatureFragment : Fragment() {
@@ -93,8 +91,27 @@ class SignatureFragment : Fragment() {
             val imageCount = database!!.signaturesDao().getCount()
 
 
-            val file = File(outputDir.toString(), "$imageCount.jpg")
+
+            /*val fileketto = File(outputDir.toString(), "text.txt")
+            val foStream = FileOutputStream(fileketto)
+            val foStream2 = FileOutputStream(fileketto)
             try {
+                foStream.write("Second line wrote 1st".toByteArray())
+            } finally {
+                foStream.close()
+            }
+
+            var si = fileketto.readText(Charsets.UTF_8)
+            si = "First line wrote 2nd" + System.lineSeparator() + si
+
+            try {
+                foStream2.write(si.toByteArray())
+            } finally {
+                foStream2.close()
+            }*/
+
+            try {
+                val file = File(outputDir.toString(), "$imageCount.jpg")
                 val stream: OutputStream = FileOutputStream(file)
                 myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
@@ -106,9 +123,16 @@ class SignatureFragment : Fragment() {
                 ).show()
                 view!!.signature_view.clearCanvas()
                 database.signaturesDao().insert(SignaturesTable(imageCount + 1))
+                database.photosDao().insert(
+                    PhotosTable(
+                        (imageCount + 1).toLong(), 123, 456, 789,
+                        "Asd", "qwe", file.canonicalPath, 0, 0
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            UploadFilesThread(this.context!!).run()
         }
         return ""
     }

@@ -25,12 +25,16 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
 
-class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
+class TransportsListFragment : Fragment(), TransportListAdapter.RowClickListener {
 
     lateinit var rootView: View
     var db: SelTransportDatabase? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.frg_transports_list, container, false)
         rootView.transportlist_exit.setOnClickListener {
             fragmentManager!!.popBackStack()
@@ -41,24 +45,24 @@ class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
         return rootView
     }
 
-    fun loadData(){
+    fun loadData() {
         val map = HashMap<String, String>()
-        map["Phone"] = "‎06204999257" //HelperClass.getSharedPreferences(context!!,"phoneNumber")
-        map["Regkey"] = "697EF54F" //HelperClass.getSharedPreferences(context!!,"verifyID")
-        Log.i("tag",map.toString())
+        map["Phone"] = HelperClass.getSharedPreferences(context!!, "phoneNumber")
+        map["Regkey"] = HelperClass.getSharedPreferences(context!!, "verifyID")
+        Log.i("tag", map.toString())
         val url = resources.getString(R.string.root_url) + "/WhatIsmyTasks2"
-        Log.i("URL",url)
+        Log.i("URL", url)
         val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url,JSONObject(map),
+            Request.Method.POST, url, JSONObject(map),
             Response.Listener { jsonRoot ->
-                Log.i("TAG",jsonRoot.toString())
+                Log.i("TAG", jsonRoot.toString())
                 try {
-                    val json = JSONArray( jsonRoot.getString("WhatIsmyTasks2Result") )
-                        processData(json)
+                    val json = JSONArray(jsonRoot.getString("WhatIsmyTasks2Result"))
+                    processData(json)
 
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
-                    HelperClass.toast(context,"Hiba a kommunikációban!")
+                    HelperClass.toast(context, "Hiba a kommunikációban!")
                 }
             },
             Response.ErrorListener { error ->
@@ -67,9 +71,9 @@ class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
         MySingleton.getInstance(context!!).addToRequestQueue(jsonObjectRequest)
     }
 
-    fun processData( jsonData:JSONArray ){
+    fun processData(jsonData: JSONArray) {
         db!!.tasksDao().deleteAllData()
-        for(compNum in 0..(jsonData.length()-1)){
+        for (compNum in 0 until jsonData.length()) {
             val jsonCompanies = jsonData.getJSONObject(compNum)
             db!!.companiesDao().insertCompanies(
                 CompaniesTable(
@@ -81,15 +85,15 @@ class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
             )
             //Log.i("TAG", jsonCompanies.getString("ID") + " - " + jsonCompanies.getString("Company_Code") + " - " + jsonCompanies.getString("Order_id") + " - " + jsonCompanies.getString("Order_Number") )
 
-            var modifyString = jsonCompanies.getString("TASKLIST").replace(":,",":\"\",")
-            modifyString = modifyString.replace(":}",":\"\"}")
-            val jsonTasks = JSONObject( modifyString ).getJSONObject("TASKS").getJSONArray("TASK")
-            for( taskNum in 0..(jsonTasks.length()-1) ){
+            var modifyString = jsonCompanies.getString("TASKLIST").replace(":,", ":\"\",")
+            modifyString = modifyString.replace(":}", ":\"\"}")
+            val jsonTasks = JSONObject(modifyString).getJSONObject("TASKS").getJSONArray("TASK")
+            for (taskNum in 0 until jsonTasks.length()) {
                 val jsonTask = jsonTasks.getJSONObject(taskNum)
                 var address = ""
                 var city = ""
                 var district = ""
-                var cord = LatLng(0.0,0.0)
+                var cord = LatLng(0.0, 0.0)
                 try {
                     if (jsonTask.getJSONObject("ADDRESS") != null) {
                         city = jsonTask.getJSONObject("ADDRESS").getString("City")
@@ -103,13 +107,13 @@ class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
                                 jsonTask.getJSONObject("ADDRESS").getString("Addr_door")
                         cord = HelperClass.getLatFromAddress(
                             context,
-                            city + " " + address
+                            "$city $address"
                         )
                     }
-                }catch (e:JSONException){
+                } catch (e: JSONException) {
                     //e.printStackTrace()
                 }
-                Log.i("TAG",address + " - " + cord.latitude + " : " + cord.longitude)
+                Log.i("TAG", address + " - " + cord.latitude + " : " + cord.longitude)
                 db!!.tasksDao().insertTask(
                     TasksTable(
                         null,
@@ -130,22 +134,27 @@ class TransportsListFragment: Fragment(), TransportListAdapter.RowClickListener{
                     )
                 )
             }
-            Log.i("TAG","TASK COUNT: " + db!!.tasksDao().getCount())
+            Log.i("TAG", "TASK COUNT: " + db!!.tasksDao().getCount())
 
         }
         loadListData()
     }
 
 
-    fun loadListData(){
+    fun loadListData() {
         rootView.transports_list_orderList.layoutManager = LinearLayoutManager(context)
-        rootView.transports_list_orderList.adapter = TransportListAdapter(context!!, (db!!.companiesDao().getAllData()).toMutableList(), this)
+        rootView.transports_list_orderList.adapter = TransportListAdapter(
+            context!!,
+            (db!!.companiesDao().getAllData()).toMutableList(),
+            this
+        )
     }
 
     override fun Click(orderId: String) {
-        Log.i("TAG","Click: " + orderId)
+        Log.i("TAG", "Click: $orderId")
         SessionClass.setValue("orderId", orderId)
-        activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
+        activity!!.supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
     }
 
     /*

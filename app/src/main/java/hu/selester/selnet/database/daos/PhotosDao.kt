@@ -28,7 +28,7 @@ interface PhotosDao {
     fun getPositionData(orderId : Int, addrId: Int) : List<PhotosTable>
 
     @Query("SELECT * FROM PhotosTable WHERE uploaded = 0 AND tried < 6")
-    fun getAllNotUploadedData() : List<PhotosTable>
+    fun  getAllNotUploadedData() : List<PhotosTable>
 
     @Query("SELECT * FROM PhotosTable WHERE uploaded = 1 AND tried < 6")
     fun getAllTryUploadedData() : List<PhotosTable>

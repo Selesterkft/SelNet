@@ -38,7 +38,7 @@ class SettingsFragment: Fragment(){
         db = SelTransportDatabase.getInstance(context!!)!!
         if( db.systemDao().getValue("WSUrl") != null) {
             urlText = db.systemDao().getValue("WSUrl")
-            if( !urlText.equals("") ){
+            if(urlText != ""){
                 rootView.setting_terminal.setText(db.systemDao().getValue("terminal"))
                 chkQRConnect()
             }
@@ -92,7 +92,7 @@ class SettingsFragment: Fragment(){
                             if( rootView.setting_terminal.text.toString().equals("") ){
                                 getTerminalString(0, true)
                             }
-                        }else{
+                        } else{
                             rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_dec,null))
                         }
                     } catch (e: Exception) {
@@ -105,8 +105,6 @@ class SettingsFragment: Fragment(){
                     rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_dec, null))
                 })
             MySingleton.getInstance(context!!).addToRequestQueue(jsonObjectRequest)
-        }else {
-
         }
     }
 
@@ -139,7 +137,7 @@ class SettingsFragment: Fragment(){
     }
 
     private fun lockTerminal(save: Boolean) {
-        val url = urlText + "/SEL_SYS_INSTALLED_TERMINALS_CHECK"
+        val url = "$urlText/SEL_SYS_INSTALLED_TERMINALS_CHECK"
         val map = HashMap<String, String>()
         map["Terminal"] = rootView.setting_terminal.text.toString()
         map["Computername"] = HelperClass.getAndroidID(context!!)
@@ -150,9 +148,9 @@ class SettingsFragment: Fragment(){
                     val rootText = response.getString("SEL_SYS_INSTALLED_TERMINALS_CHECKResult")
                     val jsonObject = JSONObject(rootText)
                     val rtext = jsonObject.getString("ERROR_CODE")
-                    if (!rtext.isEmpty()) {
+                    if (rtext.isNotEmpty()) {
                         if (rtext == "-1") {
-                            if (save) saveParamters()
+                            if (save) saveParameters()
                             //Toast.makeText(getContext(), "Adatok áttöltése sikeresen eltároltam!", Toast.LENGTH_LONG).show();
                         } else {
                             val etext = jsonObject.getString("ERROR_TEXT")
@@ -173,7 +171,7 @@ class SettingsFragment: Fragment(){
         MySingleton.getInstance(context!!).addToRequestQueue(jr)
     }
 
-    internal fun saveParamters() {
+    internal fun saveParameters() {
         db.systemDao().setValue(SystemTable("WSUrl", urlText))
         db.systemDao().setValue(SystemTable("terminal", rootView.setting_terminal.text.toString()))
         SessionClass.setValue("WSUrl", urlText)
@@ -185,7 +183,7 @@ class SettingsFragment: Fragment(){
 
     private fun saveSetting() {
         var error = ""
-        if (urlText.equals("")) {
+        if (urlText == "") {
             error += "Nincs megadva a szerver host!\n\r"
         }
         if (error == "") {
@@ -202,7 +200,7 @@ class SettingsFragment: Fragment(){
                                 if (rootView.setting_terminal.text.toString().isEmpty()) {
                                     getTerminalString(1, true)
                                 } else {
-                                    saveParamters()
+                                    saveParameters()
                                 }
                                 rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_acc, null))
                             } else {

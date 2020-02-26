@@ -14,31 +14,25 @@ import hu.selester.selnet.objects.SessionClass
 import java.io.File
 import java.net.URL
 
-class UploadFilesThread(val context: Context?):Thread(){
+class UploadFilesThread(val context: Context?) : Thread() {
 
     val db: SelTransportDatabase = SelTransportDatabase.getInstance(context!!)!!
 
     override fun run() {
         val list = db.photosDao().getAllNotUploadedData()
-        list.forEach {
-            db.photosDao().setUploadStatus(it.id!!,1)
+            list.forEach {
+            db.photosDao().setUploadStatus(it.id!!, 1)
             uploadFile2(it.filePath, it.addrId, it.ptype, it.id!!)
-            Log.i("TAG","OUT THREAD")
+            Log.i("TAG", "OUT THREAD")
         }
     }
 
-    override fun destroy() {
-        super.destroy()
-        Log.i("TAG","destroy")
-    }
-
-    private fun uploadFile2(filePathString: String, addrID: Int, docType: Int, appId : Long){
+    private fun uploadFile2(filePathString: String, addrID: Int, docType: Int, appId: Long) {
         val selectedFileUri = Uri.parse(filePathString)
-        if(selectedFileUri != null){
-            Thread (Runnable{
+        if (selectedFileUri != null) {
+            Thread(Runnable {
                 val file = File(filePathString)
                 val filename = file.path.substring(file.path.lastIndexOf("/") + 1)
-                val appID = appId
                 Log.i("TAG", filename)
                 val options = BitmapFactory.Options()
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -47,33 +41,29 @@ class UploadFilesThread(val context: Context?):Thread(){
                 client.addFilePart("pic", file, filename, content_type!!)
                 client.addHeaderField("addrid", addrID.toString())
                 client.addHeaderField("doctypeid", docType.toString())
-                Log.i("TAG", addrID.toString() + " - " + docType.toString())
+                Log.i("TAG", "$addrID - $docType")
                 client.upload(object : Multipart.OnFileUploadedListener {
                     override fun onFileUploadingSuccess(response: String) {
-                        errorUpload(appID)
+                        errorUpload(appId)
                         //db.photosDao().setUploadStatus(appID,2)
                         //Log.i("TAG",""+appID)
                     }
 
                     override fun onFileUploadingFailed(responseCode: Int) {
-
-                        Log.i("TAG","FAILD: "+appID)
-
+                        Log.i("TAG", "FAILED: $appId")
                     }
                 })
             }).start()
-        }else{
-
         }
     }
 
-    fun errorUpload(appID: Long){
+    fun errorUpload(appID: Long) {
         val photoData = db.photosDao().getDataWithID(appID)
-        Log.i("TAG","tried: "+photoData.tried)
-        if( photoData.tried < 6){
+        Log.i("TAG", "tried: " + photoData.tried)
+        if (photoData.tried < 6) {
             db.photosDao().addTried(appID)
-        }else{
-            db.photosDao().setUploadStatus(appID,3)
+        } else {
+            db.photosDao().setUploadStatus(appID, 3)
         }
     }
 
@@ -83,7 +73,13 @@ class UploadFilesThread(val context: Context?):Thread(){
         val id = wholeID.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         val column = arrayOf(MediaStore.Images.Media.DATA)
         val sel = MediaStore.Images.Media._ID + "=?"
-        val cursor = context!!.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, sel, arrayOf(id), null)
+        val cursor = context!!.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            column,
+            sel,
+            arrayOf(id),
+            null
+        )
         val columnIndex = cursor!!.getColumnIndex(column[0])
         if (cursor.moveToFirst()) {
             filePath = cursor.getString(columnIndex)
