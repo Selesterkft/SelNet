@@ -45,11 +45,13 @@
             android:background="@null"
             android:focusable="false"
             android:inputType="none"
-            android:text="@string/name"
+            android:text="@string/recipient_name"
             android:textColor="#000000"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     <EditText
             android:id="@+id/static_address"
@@ -64,7 +66,9 @@
             android:textColor="#000000"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/static_name" />
+            app:layout_constraintTop_toBottomOf="@+id/static_name"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     <EditText
             android:id="@+id/static_tel_num"
@@ -79,7 +83,9 @@
             android:textColor="#000000"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/static_address" />
+            app:layout_constraintTop_toBottomOf="@+id/static_address"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
 
     <EditText
@@ -95,7 +101,9 @@
             android:textColor="#000000"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/innerLayout"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
 
     <EditText
@@ -110,7 +118,9 @@
             app:layout_constraintBottom_toBottomOf="@+id/static_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/static_name"
-            app:layout_constraintTop_toTopOf="@+id/static_name" />
+            app:layout_constraintTop_toTopOf="@+id/static_name"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     <EditText
             android:id="@+id/address_input"
@@ -123,7 +133,9 @@
             app:layout_constraintBottom_toBottomOf="@+id/static_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/static_address"
-            app:layout_constraintTop_toTopOf="@+id/static_address" />
+            app:layout_constraintTop_toTopOf="@+id/static_address"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     <EditText
             android:id="@+id/tel_num_input"
@@ -137,7 +149,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/static_tel_num"
-            app:layout_constraintTop_toTopOf="@+id/static_tel_num" />
+            app:layout_constraintTop_toTopOf="@+id/static_tel_num"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/innerLayout"

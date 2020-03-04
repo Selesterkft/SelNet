@@ -77,8 +77,8 @@ class LoginCodeFragment : Fragment(){
                     val json = JSONObject(jsonText)
                     if (json.getInt("ERROR_CODE") == -1) {
                         LoadDocTypeThread(context).start()
-                        activity!!.supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
+                        /*activity!!.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()*/
                     } else {
                         toast(context, json.getString("ERROR_TEXT"),10000)
                     }

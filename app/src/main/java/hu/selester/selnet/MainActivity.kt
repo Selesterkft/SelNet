@@ -15,10 +15,6 @@ class MainActivity : AppCompatActivity() {
         SessionClass.setValue("WSUrl", getString(R.string.root_url))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VerifyLoginFragment())
-            .addToBackStack("App").commit()
-
     }
 
 }

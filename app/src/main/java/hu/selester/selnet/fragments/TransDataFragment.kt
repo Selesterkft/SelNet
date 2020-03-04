@@ -19,7 +19,7 @@ import hu.selester.selnet.helper.HelperClass
 import hu.selester.selnet.helper.MySingleton
 import hu.selester.selnet.objects.SessionClass
 import hu.selester.selnet.R
-import kotlinx.android.synthetic.main.frg_trasdata.view.*
+import kotlinx.android.synthetic.main.frg_transdata.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -33,7 +33,7 @@ class TransDataFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.frg_trasdata, container, false)
+        rootView = inflater.inflate(R.layout.frg_transdata, container, false)
         var addressStr = ""
         if (!SessionClass.getValue("choose_district").equals("") && !SessionClass.getValue("choose_district").equals(
                 " "
@@ -44,17 +44,18 @@ class TransDataFragment : Fragment() {
             )
         ) addressStr += SessionClass.getValue("choose_city") + " "
         rootView.transdata_name.text = SessionClass.getValue("choose_name")
-        rootView.transdata_address.text = addressStr + SessionClass.getValue("choose_address")
+        val addrText = addressStr + SessionClass.getValue("choose_address")
+        rootView.transdata_address.text = addrText
         val db = SelTransportDatabase.getInstance(context!!)
         val selectAddress = db!!.tasksDao().getAddressData(
             SessionClass.getValue("orderId")!!.toLong(),
             SessionClass.getValue("choose_addressId")!!.toLong()
         )
         rootView.login_webview.loadData(selectAddress.shortInfo, "text/html", "base64")
-        rootView.transdata_expandBtn.setOnClickListener {
+       /* rootView.transdata_expandBtn.setOnClickListener {
             fragmentManager!!.beginTransaction().add(R.id.fragment_container, LongInfoFragment())
                 .addToBackStack("app").commit()
-        }
+        }*/
         rootView.transdata_exit.setOnClickListener {
             fragmentManager!!.popBackStack()
         }
@@ -106,10 +107,10 @@ class TransDataFragment : Fragment() {
         )
         builder.setView(etv)
 
-        builder.setPositiveButton("IGEN") { dialog, which ->
+        builder.setPositiveButton("IGEN") { dialog, _ ->
             dialog.cancel()
         }
-        builder.setNegativeButton("NEM") { dialog, which ->
+        builder.setNegativeButton("NEM") { dialog, _ ->
             dialog.cancel()
         }
         builder.show()

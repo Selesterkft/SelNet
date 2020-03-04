@@ -33,7 +33,7 @@ class SignatureFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.dialog_signiture, container, false)
+        val rootView = inflater.inflate(R.layout.dialog_signature, container, false)
         rootView.signature_clear.setOnClickListener {
             rootView.signature_view.clearCanvas()
         }

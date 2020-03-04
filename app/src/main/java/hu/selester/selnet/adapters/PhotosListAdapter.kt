@@ -38,14 +38,14 @@ class PhotosListAdapter(private var context: Context, val dataList: MutableList<
         holder.name.text = dataList[position].ptypeText
         holder.datetime.text = dataList[position].datetime
         holder.image.setImageBitmap(HelperClass.loadLocalImage(dataList[position].filePath,20) )
-        var image: Drawable = context.getDrawable(R.drawable.red_bin)
+        var image: Drawable = context.getDrawable(R.drawable.red_bin)!!
         when(dataList[position].uploaded){
             1 -> {
-                    image = context.getDrawable(R.drawable.uploading)
+                    image = context.getDrawable(R.drawable.uploading)!!
                     holder.delBtn.setOnClickListener { listener.onDelQuestion (position) }
                  }
-            2 -> image = context.getDrawable(R.drawable.uploaded)
-            3 -> image = context.getDrawable(R.drawable.errorupload)
+            2 -> image = context.getDrawable(R.drawable.uploaded)!!
+            3 -> image = context.getDrawable(R.drawable.errorupload)!!
         }
         holder.delBtn.setImageDrawable(image)
 

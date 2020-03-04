@@ -56,7 +56,7 @@ class CardFragment: Fragment(), OnMapReadyCallback{
             SessionClass.setValue("choose_city",data.city)
             SessionClass.setValue("choose_address",data.address)
             SessionClass.setValue("choose_addressId",data.addressId.toString())
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransDataFragment()).addToBackStack("app").commit()
+            // activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransDataFragment()).addToBackStack("app").commit()
         }
         return rootView
     }

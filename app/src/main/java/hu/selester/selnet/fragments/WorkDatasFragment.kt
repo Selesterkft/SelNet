@@ -24,9 +24,9 @@ class WorkDatasFragment : Fragment(){
             activity!!.supportFragmentManager.popBackStack()
         }
         db = SelTransportDatabase.getInstance(context!!)!!
-        rootView.workdatas_fullMapBtn.setOnClickListener {
+        /*rootView.workdatas_fullMapBtn.setOnClickListener {
             fragmentManager!!.beginTransaction().replace(R.id.fragment_container, FullMapFragment()).addToBackStack("app").commit()
-        }
+        }*/
         createView()
         return rootView
     }

@@ -32,7 +32,7 @@ import hu.selester.selnet.database.tables.PhotosTable
 import hu.selester.selnet.helper.HelperClass
 import hu.selester.selnet.R
 import kotlinx.android.synthetic.main.dialog_show_image.view.*
-import kotlinx.android.synthetic.main.frg_trasphoto.view.*
+import kotlinx.android.synthetic.main.frg_transphoto.view.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -66,7 +66,7 @@ class TransPhotoFragment: Fragment(){
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = inflater.inflate(R.layout.frg_trasphoto, container, false)
+        rootView = inflater.inflate(R.layout.frg_transphoto, container, false)
         db = SelTransportDatabase.getInstance(context!!)!!
 
         rootView.transphoto_camera.setOnClickListener { takePics() }
@@ -257,9 +257,9 @@ class TransPhotoFragment: Fragment(){
     }
 
     private fun showPictureDialog(filePath: String){
-        Log.i("TAG","SHOW PICTURES: "+filePath)
-        val settingsDialog = Dialog(context)
-        settingsDialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        Log.i("TAG", "SHOW PICTURES: $filePath")
+        val settingsDialog = Dialog(context!!)
+        settingsDialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         val view = layoutInflater.inflate(R.layout.dialog_show_image, null)
         view.show_picture_dialog_image.setImageBitmap(HelperClass.loadLocalImage(filePath,2))
         view.show_picture_dialog_btn.setOnClickListener {

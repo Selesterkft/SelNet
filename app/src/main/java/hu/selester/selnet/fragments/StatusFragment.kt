@@ -14,9 +14,9 @@ class StatusFragment: Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.frg_statusfragment, container, false)
-        rootView.status_docBtn.setOnClickListener {
+        /* rootView.status_docBtn.setOnClickListener {
             activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,TransDataFragment()).addToBackStack("app").commit()
-        }
+        }*/
         return rootView
     }
 }

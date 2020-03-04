@@ -118,9 +118,9 @@ class VerifyLoginFragment : Fragment() {
                                     "verifyID"
                                 )
                             ) {
-                                activity!!.supportFragmentManager.beginTransaction()
+                                /*activity!!.supportFragmentManager.beginTransaction()
                                     .replace(R.id.fragment_container, TransportsListFragment())
-                                    .addToBackStack("app").commit()
+                                    .addToBackStack("app").commit()*/
                             }
                         } else {
                             Toast.makeText(

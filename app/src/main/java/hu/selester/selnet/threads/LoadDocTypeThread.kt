@@ -26,20 +26,16 @@ class LoadDocTypeThread(val context:Context?):Thread(){
                     Response.Listener { jsonRoot ->
                         try {
                             val jsonArray = JSONArray(jsonRoot.getString("Doc_TypesResult"))
-                            if(jsonArray != null) {
-                                for (i in 0..(jsonArray.length() - 1)) {
-                                    val jsonObject = jsonArray.getJSONObject(i)
-                                    db.docsTypeDao().insert(
-                                        DocsTypeTable(
-                                            null,
-                                            jsonObject.getInt("ID"),
-                                            jsonObject.getString("Descr"),
-                                            jsonObject.getInt("TransactID")
-                                        )
+                            for (i in 0 until jsonArray.length()) {
+                                val jsonObject = jsonArray.getJSONObject(i)
+                                db.docsTypeDao().insert(
+                                    DocsTypeTable(
+                                        null,
+                                        jsonObject.getInt("ID"),
+                                        jsonObject.getString("Descr"),
+                                        jsonObject.getInt("TransactID")
                                     )
-                                }
-                            }else{
-                                Log.i("THREAD-TAG","NULL")
+                                )
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()

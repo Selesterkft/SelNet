@@ -153,8 +153,8 @@ class TransportsListFragment : Fragment(), TransportListAdapter.RowClickListener
     override fun Click(orderId: String) {
         Log.i("TAG", "Click: $orderId")
         SessionClass.setValue("orderId", orderId)
-        activity!!.supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()
+        /*activity!!.supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, WorkDatasFragment()).addToBackStack("App").commit()*/
     }
 
     /*

@@ -32,7 +32,7 @@ class FullMapFragment: Fragment(), OnMapReadyCallback{
         mMap = googleMap!!
         mMap.uiSettings.setAllGesturesEnabled(true)
 
-        for(i in 0..(dataList.size-1)){
+        for(i in dataList.indices){
             if(dataList[i].lat != 0.0 && dataList[i].lng != 0.0){
                 val coord = LatLng(dataList[i].lat,dataList[i].lng)
                 mMap.addMarker(MarkerOptions().position(coord).title(dataList[i].name))

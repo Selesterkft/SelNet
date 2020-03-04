@@ -1,71 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <EditText
             android:id="@+id/inputbox_headerLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@null"
+            android:focusable="false"
+            android:inputType="none"
             android:text="Adja meg a megfelelő adatot!"
-            android:textSize="22dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,LabelFor"
+            android:importantForAutofill="no" />
 
-    <android.support.design.widget.TextInputLayout
+    <EditText
             android:id="@+id/inputbox_datalayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/inputbox_headerLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/inputbox_qr"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp">
-
-        <hu.selester.selnet.CustomView.EditTextWithClear
-                android:id="@+id/inputbox_datatext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Szállítólevél azonosító"/>
-
-    </android.support.design.widget.TextInputLayout>
+            app:layout_constraintEnd_toStartOf="@+id/inputbox_qr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputbox_headerLabel"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:ignore="LabelFor" />
 
     <ImageView
-            android:layout_width="30dp" android:layout_height="50dp"
-            android:src="@drawable/camera_icon" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/inputbox_camera"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/camera_icon"
             app:layout_constraintBottom_toBottomOf="@+id/inputbox_datalayout"
-            app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout" android:id="@+id/inputbox_camera"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout"
+            android:contentDescription="camera"
+            tools:ignore="HardcodedText" />
 
-    <ImageView android:layout_width="30dp" android:layout_height="50dp"
-               android:src="@drawable/tab_qr"
-               app:layout_constraintEnd_toStartOf="@+id/inputbox_camera" android:layout_marginEnd="8dp"
-               app:layout_constraintBottom_toBottomOf="@+id/inputbox_datalayout"
-               app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout" android:id="@+id/inputbox_qr"/>
+    <ImageView
+            android:id="@+id/inputbox_qr"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/tab_qr"
+            app:layout_constraintBottom_toBottomOf="@+id/inputbox_datalayout"
+            app:layout_constraintEnd_toStartOf="@+id/inputbox_camera"
+            app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout"
+            android:contentDescription="qr_code"
+            tools:ignore="HardcodedText" />
 
     <FrameLayout
             android:id="@+id/inputbox_cam_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/inputbox_datalayout"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/inputbox_btnCancel"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/inputbox_btnCancel"
+            app:layout_constraintTop_toBottomOf="@+id/inputbox_datalayout" />
 
-    <TextView
+    <Button
             android:id="@+id/inputbox_btnOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/ok"
             android:textSize="16sp"
-            android:text="OK"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="28dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
+    <Button
             android:id="@+id/inputbox_btnCancel"
-            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mégsem"
-            app:layout_constraintEnd_toStartOf="@+id/inputbox_btnOk" android:layout_marginEnd="28dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/cancel"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/inputbox_btnOk" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

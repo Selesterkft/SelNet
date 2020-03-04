@@ -36,12 +36,10 @@ class SettingsFragment: Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.frg_setting, container, false)
         db = SelTransportDatabase.getInstance(context!!)!!
-        if( db.systemDao().getValue("WSUrl") != null) {
-            urlText = db.systemDao().getValue("WSUrl")
-            if(urlText != ""){
-                rootView.setting_terminal.setText(db.systemDao().getValue("terminal"))
-                chkQRConnect()
-            }
+        urlText = db.systemDao().getValue("WSUrl")
+        if(urlText != ""){
+            rootView.setting_terminal.setText(db.systemDao().getValue("terminal"))
+            chkQRConnect()
         }
         rootView.setting_exit.setOnClickListener { fragmentManager!!.popBackStack() }
         rootView.setting_save.setOnClickListener { saveSetting() }
@@ -87,13 +85,9 @@ class SettingsFragment: Fragment(){
                 Response.Listener { jsonRoot ->
                     try {
                         val json = JSONObject(jsonRoot.getString("test_TRANResult"))
-                        if(json != null){
-                            rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_acc,null))
-                            if( rootView.setting_terminal.text.toString().equals("") ){
-                                getTerminalString(0, true)
-                            }
-                        } else{
-                            rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_dec,null))
+                        rootView.setting_qrcamera.setImageDrawable(resources.getDrawable(R.drawable.wsqr_acc,null))
+                        if(rootView.setting_terminal.text.toString() == ""){
+                            getTerminalString(0, true)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -119,7 +113,7 @@ class SettingsFragment: Fragment(){
                     rootText = response.getString("get_freeTerminalResult")
                     val jsonObject = JSONObject(rootText)
                     val terminal = jsonObject.getString("Free terminal")
-                    if (terminal != null && !terminal.isEmpty()) {
+                    if (terminal != null && terminal.isNotEmpty()) {
                         rootView.setting_terminal.setText( terminal )
                         if (type == 1) {
                             lockTerminal(save)
@@ -195,7 +189,7 @@ class SettingsFragment: Fragment(){
                         val rootText = response.getString("testResult")
                         val jsonObject = JSONObject(rootText)
                         val rtext = jsonObject.getString("message")
-                        if (!rtext.isEmpty()) {
+                        if (rtext.isNotEmpty()) {
                             if (rtext == "TESZT OK!") {
                                 if (rootView.setting_terminal.text.toString().isEmpty()) {
                                     getTerminalString(1, true)
@@ -237,13 +231,13 @@ class SettingsFragment: Fragment(){
         eanET.setText(urlText)
         eanET.selectAll()
         builder.setView(v)
-        builder.setPositiveButton("IGEN") { dialog, which ->
+        builder.setPositiveButton("IGEN") { dialog, _ ->
             KeyboardUtils.hideKeyboard(activity!!)
             urlText = eanET.text.toString()
             chkQRConnect()
             dialog.cancel()
         }
-        builder.setNegativeButton("NEM") { dialog, which ->
+        builder.setNegativeButton("NEM") { dialog, _ ->
             KeyboardUtils.hideKeyboard(activity!!)
             dialog.cancel()
         }
