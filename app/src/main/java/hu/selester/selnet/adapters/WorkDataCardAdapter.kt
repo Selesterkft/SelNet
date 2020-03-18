@@ -9,13 +9,13 @@ import hu.selester.selnet.database.tables.TasksTable
 import hu.selester.selnet.fragments.CardFragment
 
 @SuppressLint("WrongConstant")
-class WorkDatasCardAdapter(
+class WorkDataCardAdapter(
     fragmentManager: FragmentManager,
     private var dataList: List<TasksTable>
 ) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        Log.i("TAG", "FRG Num: " + position.toString())
+        Log.i("TAG", "FRG Num: $position")
         return CardFragment.newInstance(dataList[position])
     }
 
@@ -28,6 +28,6 @@ class WorkDatasCardAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return dataList[position].seqnum.toString()
+        return dataList[position].Id.toString()
     }
 }

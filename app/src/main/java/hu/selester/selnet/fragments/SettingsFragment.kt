@@ -41,7 +41,6 @@ class SettingsFragment: Fragment(){
             rootView.setting_terminal.setText(db.systemDao().getValue("terminal"))
             chkQRConnect()
         }
-        rootView.setting_exit.setOnClickListener { fragmentManager!!.popBackStack() }
         rootView.setting_save.setOnClickListener { saveSetting() }
         rootView.setting_qrcamera.setOnClickListener { loadQRCamera() }
         rootView.setting_info.setOnClickListener { manualSetDialog() }
@@ -136,7 +135,7 @@ class SettingsFragment: Fragment(){
         map["Terminal"] = rootView.setting_terminal.text.toString()
         map["Computername"] = HelperClass.getAndroidID(context!!)
         map["StartupPath"] = "/data/data/" + context!!.packageName
-        val jr = JsonObjectRequest(Request.Method.POST, url, JSONObject(map),
+        val jr = JsonObjectRequest(Request.Method.POST, url, JSONObject(map as Map<*, *>),
             Response.Listener { response ->
                 try {
                     val rootText = response.getString("SEL_SYS_INSTALLED_TERMINALS_CHECKResult")
@@ -172,7 +171,6 @@ class SettingsFragment: Fragment(){
         SessionClass.setValue("terminal", rootView.setting_terminal.text.toString())
         Toast.makeText(context, "Mentés sikeresen megtörtént!", Toast.LENGTH_LONG).show()
         KeyboardUtils.hideKeyboard(activity!!)
-        fragmentManager!!.popBackStack()
     }
 
     private fun saveSetting() {
@@ -181,9 +179,8 @@ class SettingsFragment: Fragment(){
             error += "Nincs megadva a szerver host!\n\r"
         }
         if (error == "") {
-            val url = urlText + "/teszt"
-            val jsonObject: JSONObject? = null
-            val jr = JsonObjectRequest(Request.Method.GET, url, jsonObject,
+            val url = "$urlText/teszt"
+            val jr = JsonObjectRequest(Request.Method.GET, url, null,
                 Response.Listener { response ->
                     try {
                         val rootText = response.getString("testResult")

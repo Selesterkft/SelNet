@@ -169,10 +169,10 @@ class TransPhotoFragment: Fragment(){
                         Log.i("TAG",""+Build.VERSION.SDK_INT + ">=" + Build.VERSION_CODES.LOLLIPOP_MR1)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                             Log.i("GiTa", "1")
-                            mCurrPath = getRealPathFromURI(activity!!.baseContext, selectedImage)
+                            mCurrPath = getRealPathFromURI(activity!!.baseContext, selectedImage!!)
                         } else {
                             Log.i("GiTa", "2")
-                            mCurrPath = getRealPathFromUri2(activity!!.baseContext, selectedImage)
+                            mCurrPath = getRealPathFromUri2(activity!!.baseContext, selectedImage!!)
                         }
                         if (mCurrPath == "") {
                             mCurrPath = getRealPathFromUri2(activity!!.baseContext, selectedImage)

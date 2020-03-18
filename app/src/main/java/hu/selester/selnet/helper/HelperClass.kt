@@ -22,7 +22,7 @@ class HelperClass(){
         fun getSharedPreferences(act: Context, key: String): String{
             val prefs = act.getSharedPreferences("selTransport_logged", 0)
 
-            return prefs.getString(key,"")
+            return prefs.getString(key,"").toString()
         }
 
         fun setSharedPreferences(act: Context, key: String, value: String){
@@ -50,7 +50,7 @@ class HelperClass(){
             return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         }
 
-        fun getLatFromAddress(context: Context?, address: String): LatLng {
+        fun getCoordFromAddress(context: Context?, address: String): LatLng {
             if (context != null) {
                 val latitude: Double
                 val longitude: Double

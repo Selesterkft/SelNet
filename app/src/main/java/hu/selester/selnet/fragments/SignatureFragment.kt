@@ -19,13 +19,13 @@ import hu.selester.selnet.database.SelTransportDatabase
 import hu.selester.selnet.database.tables.PhotosTable
 import hu.selester.selnet.database.tables.SignaturesTable
 import hu.selester.selnet.threads.UploadFilesThread
-import kotlinx.android.synthetic.main.dialog_signiture.view.*
+import kotlinx.android.synthetic.main.dialog_signature.view.*
 import java.io.*
 
 
 class SignatureFragment : Fragment() {
 
-    val IMAGE_DIRECTORY: String = "signdemo"
+    private val imageDir: String = "signdemo"
     private lateinit var myBitmap: Bitmap
 
     override fun onCreateView(
@@ -83,7 +83,7 @@ class SignatureFragment : Fragment() {
     private fun saveImageToStorage(): String {
         val externalStorageState = Environment.getExternalStorageState()
         if (externalStorageState == Environment.MEDIA_MOUNTED) {
-            val outputDir = File(Environment.getExternalStorageDirectory(), IMAGE_DIRECTORY)
+            val outputDir = File(Environment.getExternalStorageDirectory(), imageDir)
             if (!outputDir.exists()) {
                 outputDir.mkdirs()
             }

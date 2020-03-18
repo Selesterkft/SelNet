@@ -47,18 +47,15 @@ class TransDataFragment : Fragment() {
         val addrText = addressStr + SessionClass.getValue("choose_address")
         rootView.transdata_address.text = addrText
         val db = SelTransportDatabase.getInstance(context!!)
-        val selectAddress = db!!.tasksDao().getAddressData(
+        /*val selectAddress = db!!.tasksDao().getAddressData(
             SessionClass.getValue("orderId")!!.toLong(),
             SessionClass.getValue("choose_addressId")!!.toLong()
-        )
-        rootView.login_webview.loadData(selectAddress.shortInfo, "text/html", "base64")
+        )*/
+        // rootView.login_webview.loadData(selectAddress.shortInfo, "text/html", "base64")
        /* rootView.transdata_expandBtn.setOnClickListener {
             fragmentManager!!.beginTransaction().add(R.id.fragment_container, LongInfoFragment())
                 .addToBackStack("app").commit()
         }*/
-        rootView.transdata_exit.setOnClickListener {
-            fragmentManager!!.popBackStack()
-        }
         addInputBtn("Megjegyzés")
         addSignitureBtn("Aláírás")
         return rootView

@@ -107,7 +107,7 @@ class VerifyLoginFragment : Fragment() {
             val url = SessionClass.getValue("WSUrl") + "/PDA_SMS_REG"
             Log.i("URL", "$url - $map")
             val jsonObjectRequest = JsonObjectRequest(
-                Request.Method.POST, url, JSONObject(map),
+                Request.Method.POST, url, JSONObject(map as Map<*, *>),
                 Response.Listener { jsonRoot ->
                     try {
                         Log.i("TAG", jsonRoot.toString())

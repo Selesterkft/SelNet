@@ -47,13 +47,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                    android:id="@+id/card_content_district"
+                    android:id="@+id/card_content_zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/district_placeholder"
+                    android:text="@string/zip_placeholder"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_content_district" />
+                    app:layout_constraintTop_toBottomOf="@+id/card_content_zip" />
 
             <TextView
                     android:id="@+id/card_content_fulladdress"

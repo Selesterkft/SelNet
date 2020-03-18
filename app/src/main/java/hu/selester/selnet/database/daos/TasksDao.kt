@@ -9,8 +9,8 @@ import hu.selester.selnet.database.tables.TasksTable
 @Dao
 interface TasksDao{
 
-    @Query("SELECT * FROM TasksTable WHERE orderId = :orderID AND addressId = :addressId")
-    fun getAddressData(orderID: Long, addressId: Long): TasksTable
+    /* @Query("SELECT * FROM TasksTable WHERE orderId = :orderID AND addressId = :addressId")
+    fun getAddressData(orderID: Long, addressId: Long): TasksTable */
 
     @Query("SELECT * FROM TasksTable WHERE orderId = :orderID")
     fun getOrderData(orderID: Long): List<TasksTable>

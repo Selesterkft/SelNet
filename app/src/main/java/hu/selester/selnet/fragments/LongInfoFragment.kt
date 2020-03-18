@@ -15,11 +15,8 @@ class LongInfoFragment: Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.frg_longinfo,container, false)
         val db = SelTransportDatabase.getInstance(context!!)
-        val selectAddress = db!!.tasksDao().getAddressData(SessionClass.getValue("orderId")!!.toLong(),  SessionClass.getValue("choose_addressId")!!.toLong())
-        rootView.longinfo_webview.loadData(selectAddress.longInfo,"text/html", "base64")
-        rootView.longinfo_exit.setOnClickListener {
-            fragmentManager!!.popBackStack()
-        }
+        // val selectAddress = db!!.tasksDao().getAddressData(SessionClass.getValue("orderId")!!.toLong(),  SessionClass.getValue("choose_addressId")!!.toLong())
+        // rootView.longinfo_webview.loadData(selectAddress.longInfo,"text/html", "base64")
         return rootView
     }
 }

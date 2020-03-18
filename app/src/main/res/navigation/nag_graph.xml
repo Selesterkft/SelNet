@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/nav_graph"
-        app:startDestination="@id/verifyLoginFragment">
+        app:startDestination="@id/transportsListFragment">
 
     <fragment
             android:id="@+id/transportsListFragment"
@@ -41,9 +41,9 @@
     </fragment>
     <fragment
             android:id="@+id/workDatasFragment"
-            android:name="hu.selester.selnet.fragments.WorkDatasFragment"
+            android:name="hu.selester.selnet.fragments.WorkDataFragment"
             android:label="WorkDatasFragment"
-            tools:layout="@layout/frg_workdatas">
+            tools:layout="@layout/frg_workdata">
         <action
                 android:id="@+id/action_workDatasFragment_to_transportsListFragment"
                 app:destination="@id/transportsListFragment" />

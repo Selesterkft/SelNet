@@ -7,17 +7,12 @@ import java.io.Serializable
 @Entity
 data class TasksTable(
     @PrimaryKey(autoGenerate = true) var Id: Int?,
-    var seqnum: Int,
     var orderId: Long,
-    var ordId: Long,
-    var ordLId: Long,
-    var addressId: Long,
-    var addressTypeId: Int,
     var company: String,
-    var address: String,
     var shortInfo: String,
     var longInfo: String,
-    var district: String,
+    var address: String,
+    var zip: String,
     var city: String,
     var lat: Double,
     var lng: Double
