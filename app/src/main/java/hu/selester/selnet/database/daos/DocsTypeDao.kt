@@ -14,12 +14,12 @@ interface DocsTypeDao {
     @Query("SELECT transactId FROM DocsTypeTable ORDER BY transactId DESC LIMIT 1")
     fun getLastTransactID(): Int
 
-    @Insert
-    fun insert(docsTypeTable : DocsTypeTable)
-
     @Query("DELETE FROM DocsTypeTable")
     fun deleteAll()
 
     @Query("SELECT COUNT(id) FROM DocsTypeTable")
     fun getAllRowsNum() : Int
+
+    @Insert
+    fun insert(docsTypeTable : DocsTypeTable)
 }

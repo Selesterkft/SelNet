@@ -10,6 +10,7 @@
     <string name="tasks">Feladatok</string>
     <string name="settings">Beállítások</string>
     <string name="docmanager">Dokumentumkezelő</string>
+    <string name="information">Információ</string>
     <string name="routetext">Elindultam</string>
     <string name="retry">Újra</string>
     <string name="must_login">A Selester Kft. által biztosított Selexped alkalmazás minden funkciójának eléréséhez először be kell jelentkeznie.</string>
@@ -20,9 +21,13 @@
     <string name="city_placeholder">[city]</string>
     <string name="addr_placeholder">[Addr Addr_ps_type Addr_housenr Addr_building Addr_stairway Addr_floor Addr_door]</string>
     <string name="recipient_name">Átvevő név:</string>
-    <string name="address">Cím:</string>
+    <string name="name"><u>Név:</u></string>
+    <string name="address"><u>Cím:</u></string>
+    <string name="info"><u>Információ</u>:</string>
     <string name="tel_num">Telefon:</string>
     <string name="signature">Aláírás:</string>
     <string name="cancel">Mégsem</string>
     <string name="ok">OK</string>
+    <string name="placeholder">______________________</string>
+    <string name="login">Bejelentkezés</string>
 </resources>

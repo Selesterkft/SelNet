@@ -8,13 +8,12 @@ import hu.selester.selnet.database.tables.CompaniesTable
 
 @Dao
 interface CompaniesDao{
-
     @Query("SELECT * FROM CompaniesTable ")
     fun getAllData():List<CompaniesTable>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCompanies(data: CompaniesTable)
-
     @Query("SELECT COUNT(id) FROM CompaniesTable")
     fun getCount():Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCompanies(data: CompaniesTable)
 }

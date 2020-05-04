@@ -14,7 +14,6 @@ import hu.selester.selnet.database.tables.PhotosTable
 
 @Dao
 interface PhotosDao {
-
     @Query("SELECT * FROM PhotosTable WHERE id = :id")
     fun getDataWithID(id : Long) : PhotosTable
 
@@ -39,9 +38,6 @@ interface PhotosDao {
     @Query("SELECT * FROM PhotosTable WHERE uploaded = 3 AND tried > 5")
     fun getAllErrorUploadedData() : List<PhotosTable>
 
-    @Insert
-    fun insert(photosTable : PhotosTable)
-
     @Query("DELETE FROM PhotosTable")
     fun deleteAll()
 
@@ -53,4 +49,7 @@ interface PhotosDao {
 
     @Query("UPDATE PhotosTable SET uploaded = 0, tried = tried + 1 WHERE id = :id")
     fun addTried(id : Long)
+
+    @Insert
+    fun insert(photosTable : PhotosTable)
 }

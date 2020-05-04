@@ -8,7 +8,6 @@ import hu.selester.selnet.database.tables.ButtonsTable
 
 @Dao
 interface ButtonsDao{
-
     @Query("SELECT * FROM ButtonsTable")
     fun getAllData(): List<ButtonsTable>
 

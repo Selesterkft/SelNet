@@ -13,39 +13,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="345" />
-                            <option name="y" value="281" />
+                            <option name="x" value="21" />
+                            <option name="y" value="160" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_signatureFragment_to_transportsListFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="transDataFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-6" />
-                            <option name="y" value="-448" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_transDataFragment_to_transPhotoFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -55,18 +25,21 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="177" />
-                            <option name="y" value="-106" />
+                            <option name="x" value="16" />
+                            <option name="y" value="-140" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_transPhotoFragment_to_signatureFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="transportInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="22" />
+                            <option name="y" value="-441" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -82,17 +55,22 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_transportsListFragment_self">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_transportsListFragment_to_signatureFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_transportsListFragment_to_transDataFragment">
+                            <entry key="action_transportsListFragment_to_transPhotoFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_transportsListFragment_to_transPhotoFragment">
+                            <entry key="action_transportsListFragment_to_transportInfoFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -128,7 +106,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-538" />
+                            <option name="x" value="-536" />
                             <option name="y" value="-141" />
                           </Point>
                         </option>

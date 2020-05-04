@@ -28,8 +28,8 @@ class SmsIncomingReceiver : BroadcastReceiver() {
                     val message = currentMessage.displayMessageBody
                     val verifyID = message.split("#")[1].substring(0,8)
 
-                    HelperClass.setSharedPreferences(context!!,"verifyID",verifyID)
-                    HelperClass.setSharedPreferences(context!!,"logged","1")
+                    HelperClass.setSharedPreferences(context,"verifyID",verifyID)
+                    HelperClass.setSharedPreferences(context,"logged","1")
                     Log.i("TAG","RECEIVE SMS")
                 }
             }

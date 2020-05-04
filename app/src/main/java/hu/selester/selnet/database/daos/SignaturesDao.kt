@@ -7,9 +7,9 @@ import hu.selester.selnet.database.tables.SignaturesTable
 
 @Dao
 interface SignaturesDao {
-    @Insert
-    fun insert(signaturesTable: SignaturesTable)
-
     @Query("SELECT COUNT(id) FROM SignaturesTable")
     fun getCount() : Int
+
+    @Insert
+    fun insert(signaturesTable: SignaturesTable)
 }

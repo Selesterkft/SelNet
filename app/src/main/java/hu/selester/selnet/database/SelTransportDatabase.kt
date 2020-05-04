@@ -8,8 +8,9 @@ import hu.selester.selnet.database.daos.*
 import hu.selester.selnet.database.tables.*
 
 @Database(
-    entities = [TransportDatasTable::class, PhotosTable::class, DocsTypeTable::class, SystemTable::class, ButtonsTable::class, TasksTable::class, CompaniesTable::class, SignaturesTable::class],
-    version = 18,
+    entities = [TransportDatasTable::class, PhotosTable::class, DocsTypeTable::class, SystemTable::class, ButtonsTable::class, TaskActionsTable::class,
+        TasksTable::class, CompaniesTable::class, SignaturesTable::class],
+    version = 1,
     exportSchema = false
 )
 abstract class SelTransportDatabase : RoomDatabase() {
@@ -19,6 +20,7 @@ abstract class SelTransportDatabase : RoomDatabase() {
     abstract fun photosDao(): PhotosDao
     abstract fun systemDao(): SystemDao
     abstract fun buttonsDao(): ButtonsDao
+    abstract fun tasksActionsDao(): TaskActionsDao
     abstract fun tasksDao(): TasksDao
     abstract fun companiesDao(): CompaniesDao
     abstract fun signaturesDao(): SignaturesDao
@@ -30,7 +32,7 @@ abstract class SelTransportDatabase : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(SelTransportDatabase::class) {
                     INSTANCE = Room.databaseBuilder(
-                        context.getApplicationContext(),
+                        context.applicationContext,
                         SelTransportDatabase::class.java, "seltransport.db"
                     )
                         .allowMainThreadQueries()

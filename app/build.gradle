@@ -17,12 +17,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding {
+    viewBinding {
         enabled = true
     }
 }
@@ -49,11 +52,11 @@ dependencies {
     implementation 'com.hbb20:ccp:2.2.3'
     implementation 'com.kyanogen.signatureview:signature-view:1.0'
 
-    def room_version = "2.2.4"
+    def room_version = "2.2.5"
     kapt "android.arch.persistence.room:compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
 
-    def nav_version = "2.3.0-alpha03"
+    def nav_version = "2.3.0-alpha04"
 
     // Java language implementation
     implementation "androidx.navigation:navigation-fragment:$nav_version"

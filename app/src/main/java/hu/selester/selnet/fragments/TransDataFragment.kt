@@ -35,14 +35,20 @@ class TransDataFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.frg_transdata, container, false)
         var addressStr = ""
-        if (!SessionClass.getValue("choose_district").equals("") && !SessionClass.getValue("choose_district").equals(
+        if (SessionClass.getValue("choose_district") != null && !SessionClass.getValue("choose_district")
+                .equals("") && !SessionClass.getValue("choose_district").equals(
                 " "
             )
-        ) addressStr += SessionClass.getValue("choose_district") + " "
-        if (!SessionClass.getValue("choose_city").equals("") && !SessionClass.getValue("choose_city").equals(
+        ) {
+            addressStr += SessionClass.getValue("choose_district") + " "
+        }
+        if (SessionClass.getValue("choose_city") != null && !SessionClass.getValue("choose_city")
+                .equals("") && !SessionClass.getValue("choose_city").equals(
                 " "
             )
-        ) addressStr += SessionClass.getValue("choose_city") + " "
+        ) {
+            addressStr += SessionClass.getValue("choose_city") + " "
+        }
         rootView.transdata_name.text = SessionClass.getValue("choose_name")
         val addrText = addressStr + SessionClass.getValue("choose_address")
         rootView.transdata_address.text = addrText
@@ -52,10 +58,10 @@ class TransDataFragment : Fragment() {
             SessionClass.getValue("choose_addressId")!!.toLong()
         )*/
         // rootView.login_webview.loadData(selectAddress.shortInfo, "text/html", "base64")
-       /* rootView.transdata_expandBtn.setOnClickListener {
-            fragmentManager!!.beginTransaction().add(R.id.fragment_container, LongInfoFragment())
-                .addToBackStack("app").commit()
-        }*/
+        /* rootView.transdata_expandBtn.setOnClickListener {
+             fragmentManager!!.beginTransaction().add(R.id.fragment_container, LongInfoFragment())
+                 .addToBackStack("app").commit()
+         }*/
         addInputBtn("Megjegyzés")
         addSignitureBtn("Aláírás")
         return rootView

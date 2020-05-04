@@ -15,15 +15,18 @@ interface TasksDao{
     @Query("SELECT * FROM TasksTable WHERE orderId = :orderID")
     fun getOrderData(orderID: Long): List<TasksTable>
 
+    @Query("SELECT * FROM TasksTable WHERE Id = :id")
+    fun getData(id: Long): List<TasksTable>
+
     @Query("SELECT * FROM TasksTable")
     fun getAllData(): List<TasksTable>
 
     @Query("SELECT COUNT(id) FROM TasksTable")
     fun getCount(): Int
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTask(data: TasksTable)
-
     @Query("DELETE FROM TasksTable WHERE Id > 0")
     fun deleteAllData()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTask(data: TasksTable) : Long
 }

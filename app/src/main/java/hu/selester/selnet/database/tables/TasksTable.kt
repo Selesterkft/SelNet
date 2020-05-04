@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Entity
 data class TasksTable(
-    @PrimaryKey(autoGenerate = true) var Id: Int?,
+    @PrimaryKey(autoGenerate = true) var Id: Long?,
     var orderId: Long,
     var company: String,
     var shortInfo: String,
