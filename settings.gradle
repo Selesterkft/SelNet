@@ -1,1 +1,1 @@
-include ':app', ':creative-viewpager'
+include ':app'

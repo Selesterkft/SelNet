@@ -2,15 +2,18 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorIcon">#418CCB</color>
     <color name="colorAccent">#FF4081</color>
     <color name="errorColor">#FF0000</color>
-    <color name="loginBtnColor">#669acc</color>
+    <color name="remarkColor">#EC634B</color>
+    <color name="btnColor">#669acc</color>
     <color name="decorColor">#4cc5f3</color>
     <color name="whiteColor">#ffffff</color>
     <color name="ltGrayColor">#efefef</color>
     <color name="semiLtGrayColor">#dfdfdf</color>
     <color name="ltBlue">#dfdfff</color>
-    <color name="grayColor">#afafaf</color>
+    <color name="grayColor">#7f7f7f</color>
+    <color name="darkGrayColor">#555</color>
     <color name="decorDarkColor">#06193d</color>
     <color name="backOpacityColor">#55000000</color>
     <color name="itemListFullColor">#dfdfdf</color>

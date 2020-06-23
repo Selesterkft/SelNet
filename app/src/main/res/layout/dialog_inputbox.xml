@@ -30,9 +30,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/inputbox_qr"
+            app:layout_constraintEnd_toStartOf="@id/inputbox_qr"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputbox_headerLabel"
+            app:layout_constraintTop_toBottomOf="@id/inputbox_headerLabel"
             android:importantForAutofill="no"
             android:inputType="text"
             tools:ignore="LabelFor" />
@@ -42,10 +42,10 @@
             android:layout_width="30dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/camera_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/inputbox_datalayout"
+            android:src="@drawable/camera"
+            app:layout_constraintBottom_toBottomOf="@id/inputbox_datalayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout"
+            app:layout_constraintTop_toTopOf="@id/inputbox_datalayout"
             android:contentDescription="camera"
             tools:ignore="HardcodedText" />
 
@@ -55,9 +55,9 @@
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/tab_qr"
-            app:layout_constraintBottom_toBottomOf="@+id/inputbox_datalayout"
-            app:layout_constraintEnd_toStartOf="@+id/inputbox_camera"
-            app:layout_constraintTop_toTopOf="@+id/inputbox_datalayout"
+            app:layout_constraintBottom_toBottomOf="@id/inputbox_datalayout"
+            app:layout_constraintEnd_toStartOf="@id/inputbox_camera"
+            app:layout_constraintTop_toTopOf="@id/inputbox_datalayout"
             android:contentDescription="qr_code"
             tools:ignore="HardcodedText" />
 
@@ -67,8 +67,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/inputbox_btnCancel"
-            app:layout_constraintTop_toBottomOf="@+id/inputbox_datalayout" />
+            app:layout_constraintBottom_toTopOf="@id/inputbox_btnCancel"
+            app:layout_constraintTop_toBottomOf="@id/inputbox_datalayout" />
 
     <Button
             android:id="@+id/inputbox_btnOk"
@@ -90,6 +90,6 @@
             android:text="@string/cancel"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/inputbox_btnOk" />
+            app:layout_constraintEnd_toStartOf="@id/inputbox_btnOk" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

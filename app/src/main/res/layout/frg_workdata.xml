@@ -8,61 +8,49 @@
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/cardbackground"
-            android:scaleType="centerCrop"
             android:alpha="0.7"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/card_background" />
 
     <com.cheekiat.indicatorsteplib.StepProgress
             android:id="@+id/workdatas_stepProgress"
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
             android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             app:dotDefaultSize="5dp"
             app:dotSelectedSize="30dp"
-            app:unselectTextColor="@color/secondColor"
-            android:layout_gravity="center_horizontal"
             app:indicator_mode="step"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:unselectTextColor="@color/secondColor" />
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/workDatas_viewpager"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0px"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
-            android:layout_weight="1"
-            app:layout_constraintTop_toBottomOf="@+id/workdatas_stepProgress"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/workdatas_exitBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="0dp" />
-
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/but_cancel_44x44"
-            android:background="@null"
-            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:id="@+id/workdatas_exitBtn" />
+            app:layout_constraintTop_toBottomOf="@id/workdatas_stepProgress" />
 
     <ImageButton
+            android:id="@+id/work_data_full_map_btn"
             android:layout_width="180dp"
             android:layout_height="120dp"
-            android:src="@drawable/mapicon"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
-            android:id="@+id/workdatas_fullMapBtn" />
+            android:layout_marginBottom="0dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/map_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

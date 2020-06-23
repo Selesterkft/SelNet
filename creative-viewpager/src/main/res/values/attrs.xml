@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <declare-styleable name="CreativeViewPager">
-    <attr format="dimension" name="headerItemSize"/>
-    <attr format="dimension" name="headerItemMargin"/>
-    <attr format="dimension" name="contentHorizontalPadding"/>
-    <attr format="dimension" name="contentItemMargin"/>
-  </declare-styleable>
-</resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/dialog_new_user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="5dp"
+            android:text="@string/type_tel_num"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hbb20.CountryCodePicker
+            android:id="@+id/dialog_new_user_cc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/whiteColor"
+            app:ccp_autoDetectCountry="true"
+            app:ccp_countryPreference="hu,hu"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_new_user_head"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <EditText
+            android:id="@+id/dialog_new_user_telephone_number"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@color/whiteColor"
+            android:hint="@string/tel_num_placeholder"
+            android:inputType="phone"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_new_user_cc"
+            app:layout_constraintStart_toEndOf="@id/dialog_new_user_cc"
+            app:layout_constraintTop_toTopOf="@id/dialog_new_user_cc" />
+
+    <ImageView
+            android:id="@+id/dialog_new_user_submit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/next"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_new_user_telephone_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dialog_new_user_telephone_number"
+            app:layout_constraintTop_toTopOf="@id/dialog_new_user_telephone_number" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
