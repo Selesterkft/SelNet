@@ -1,0 +1,9 @@
+diff a/app/src/main/java/hu/selester/seltransport/MainActivity.kt b/app/src/main/java/hu/selester/seltransport/MainActivity.kt	(rejected hunks)
+@@ -32,6 +32,7 @@
+     try {
+         val trustAllCerts: Array<TrustManager> =
+             arrayOf(object : X509TrustManager {
++                val acceptedIssuers: Array<X509Certificate?>?
+                     get() = arrayOfNulls(0)
+ 
+                 override fun checkClientTrusted(

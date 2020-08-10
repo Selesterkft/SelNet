@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.selester.seltransport.R
-import hu.selester.seltransport.database.tables.PhotosTable
+import hu.selester.seltransport.database.tables.PicturesTable
 import hu.selester.seltransport.utils.AppUtils
 import kotlinx.android.synthetic.main.row_photo_list.view.*
 
 class PhotosListAdapter(
     private var context: Context,
-    private var dataList: MutableList<PhotosTable>,
+    private var dataList: MutableList<PicturesTable>,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<PhotosListAdapter.ViewHolder>() {
 
@@ -51,12 +51,12 @@ class PhotosListAdapter(
         notifyDataSetChanged()
     }
 
-    fun addItem(item: PhotosTable) {
+    fun addItem(item: PicturesTable) {
         dataList.add(0, item)
         notifyDataSetChanged()
     }
 
-    fun resetList(newList: MutableList<PhotosTable>) {
+    fun resetList(newList: MutableList<PicturesTable>) {
         dataList = newList
         notifyDataSetChanged()
     }

@@ -19,7 +19,8 @@ class TransportListAdapter(
 
     interface RowClickListener {
         fun click(id: Long)
-        fun callPhone(phoneNumber: String) {}
+        fun callPhone(phoneNumber: String)
+        fun lockTransport(id: Long)
     }
 
     inner class TransportViewHolder(itemView: View) :
@@ -34,6 +35,7 @@ class TransportListAdapter(
         private val mTruckPlateNo = itemView.row_transport_list_truck_plate!!
         private val mTrailerNo = itemView.row_transport_list_trailer_plate!!
         private val mContactLayout = itemView.row_transport_list_contact_layout!!
+        private val mLockLayout = itemView.row_transport_list_lock_layout
 
         fun bind(item: TransportsTable) {
             mTransportNumber.text = item.transportNo
@@ -53,6 +55,9 @@ class TransportListAdapter(
                 mContactLayout.setOnClickListener {
                     mClickListener.callPhone(item.contactPhoneNumber)
                 }
+            }
+            mLockLayout.setOnClickListener {
+                mClickListener.lockTransport(item.id!!)
             }
         }
     }

@@ -14,20 +14,24 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.selester.seltransport.MainActivity
 import hu.selester.seltransport.R
+import hu.selester.seltransport.adapters.DoubleRowAdapter
 import hu.selester.seltransport.adapters.SimpleRowAdapter
 import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.database.tables.AddressesTable
 import hu.selester.seltransport.databinding.FrgAddressDetailBinding
-import hu.selester.seltransport.dialogs.StatusTrackingDialogFragment
+import hu.selester.seltransport.dialogs.SimpleDialogFragment
 import hu.selester.seltransport.utils.AppUtils
 
-class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
+class AddressDetailFragment : Fragment(), DoubleRowAdapter.RowClickListener,
+    SimpleDialogFragment.ButtonListener {
     private lateinit var mBinding: FrgAddressDetailBinding
     private lateinit var mDb: SelTransportDatabase
     private lateinit var mAddress: AddressesTable
     private val mCallPhoneRequest = 104
     private lateinit var mChosenPhoneNumber: String
+    private lateinit var mSimpleDialogFragment: SimpleDialogFragment
 
     private fun callPhone(phoneNumber: String) {
         mChosenPhoneNumber = phoneNumber
@@ -59,7 +63,7 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                 grantResults.isEmpty() -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tud telefonhívást indítani, ha nem engedélyezi a telefonhívásokat!"
+                        getString(R.string.no_call_permission)
                     )
                 }
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
@@ -68,7 +72,7 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                 else -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tud telefonhívást indítani, ha nem engedélyezi a telefonhívásokat!"
+                        getString(R.string.no_call_permission)
                     )
                 }
             }
@@ -76,16 +80,16 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
     }
 
 
-    override fun simpleRowClick(id: Long, type: Int) {
+    override fun doubleRowClick(id: Long, type: Int) {
         when (type) {
             SimpleRowAdapter.TYPE_TASK_ACTION -> {
                 val action = mDb.taskActionsDao().getById(id)
                 val address = mDb.addressesDao().getByCpDbId(action.externalId)
                 when (action.code) {
-                    "nested" -> {
+                    AppUtils.NESTED -> {
                         TODO("Not yet implemented")
                     }
-                    "signature" -> {
+                    AppUtils.SIGNATURE -> {
                         val bundle = bundleOf(
                             "address_id" to address.id!!
                         )
@@ -94,7 +98,7 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                             bundle
                         )
                     }
-                    "scan" -> {
+                    AppUtils.SCAN -> {
                         val bundle = bundleOf(
                             "address_id" to address.id!!
                         )
@@ -103,7 +107,7 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                             bundle
                         )
                     }
-                    "map" -> {
+                    AppUtils.MAP -> {
                         val uri = if (address.lat == 0.0 || address.lon == 0.0) {
                             "http://maps.google.com/maps?q=${address.city}, ${address.zip}, ${address.address}(${address.name})"
                         } else {
@@ -121,25 +125,33 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                             } catch (innerEx: ActivityNotFoundException) {
                                 AppUtils.toast(
                                     requireContext(),
-                                    "Please install a maps application"
+                                    getString(R.string.no_map_app)
                                 )
                             }
                         }
                     }
-                    "tracking" -> {
+                    AppUtils.TRACKING -> {
                         val currentStatus =
                             mDb.logisticStatusesDao().getByCpId(address.logisticStatusId)
                         val nextStatuses = mDb.logisticStatusesDao()
                             .getNextStatuses(address.transportId, address.type, currentStatus.id!!)
-                        val statusTrackingDialogFragment =
-                            StatusTrackingDialogFragment(nextStatuses[0].hu)
-                        statusTrackingDialogFragment.setTargetFragment(this, 1)
-                        statusTrackingDialogFragment.show(
+                        val message =
+                            getString(R.string.change_logistic_status, AppUtils.getStatusName(nextStatuses[0], requireContext()))
+                        mSimpleDialogFragment =
+                            SimpleDialogFragment(
+                                this,
+                                getString(R.string.tracking),
+                                message,
+                                resources.getString(R.string.cancel),
+                                resources.getString(R.string.set)
+                            )
+                        mSimpleDialogFragment.setTargetFragment(this, 1)
+                        mSimpleDialogFragment.show(
                             parentFragmentManager,
                             "StatusTrackingDialogFragment"
                         )
                     }
-                    "goods" -> {
+                    AppUtils.GOODS -> {
                         val bundle = bundleOf(
                             "address_id" to address.id!!
                         )
@@ -148,13 +160,26 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
                             bundle
                         )
                     }
-                    "get_data" -> {
-                        TODO("Not yet implemented")
+                    AppUtils.GET_DATA -> {
+                        val bundle = bundleOf(
+                            "address_id" to address.id!!,
+                            "action_id" to action.id!!
+                        )
+                        findNavController().navigate(
+                            R.id.action_addressDetailFragment_to_dataEntryFragment,
+                            bundle
+                        )
                     }
-                    "show_info" -> {
-                        TODO("Not yet implemented")
+                    AppUtils.SHOW_INFO -> {
+                        val bundle = bundleOf(
+                            "address_id" to address.id!!
+                        )
+                        findNavController().navigate(
+                            R.id.action_addressDetailFragment_to_furtherInfoFragment,
+                            bundle
+                        )
                     }
-                    else -> throw java.lang.IllegalArgumentException("Unknown procedure type")
+                    else -> throw IllegalArgumentException("Unknown procedure type")
                 }
             }
         }
@@ -162,7 +187,7 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mAddress = mDb.addressesDao().getById(requireArguments().getLong("address_id"))
     }
 
@@ -171,7 +196,10 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        requireActivity().title = "Műveletek"
+        val activity = requireActivity() as MainActivity
+        activity.title = getString(R.string.procedures)
+        activity.showTitleIcons()
+
         mBinding = FrgAddressDetailBinding.inflate(inflater)
 
         mBinding.frgAddressDetailsHead.partAddressHeaderLoadImage.setImageResource(
@@ -196,12 +224,21 @@ class AddressDetailFragment : Fragment(), SimpleRowAdapter.RowClickListener {
         }
 
         mBinding.frgAddressDetailsTaskList.layoutManager = LinearLayoutManager(requireContext())
-        mBinding.frgAddressDetailsTaskList.adapter = SimpleRowAdapter(
+        mBinding.frgAddressDetailsTaskList.adapter = DoubleRowAdapter(
             requireContext(),
-            mDb.taskActionsDao().getByExtId(mAddress.cpDbId),
+            mDb.taskActionsDao().getByExtId(mAddress.cpDbId).toMutableList(),
             this
         )
 
         return mBinding.root
+    }
+
+    override fun onLeftClicked() {
+        mSimpleDialogFragment.dismiss()
+    }
+
+    override fun onRightClicked() {
+        // TODO: send status to server
+        mSimpleDialogFragment.dismiss()
     }
 }

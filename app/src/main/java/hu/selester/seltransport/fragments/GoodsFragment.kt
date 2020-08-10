@@ -26,9 +26,10 @@ class GoodsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireActivity() as MainActivity
-        activity.title = "Áru adatok"
+        activity.title = getString(R.string.goods_details)
         activity.showTitleIcons()
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mBinding = FrgGoodsBinding.inflate(inflater)
 
         mAddress = mDb.addressesDao().getById(requireArguments().getLong("address_id"))
@@ -46,7 +47,7 @@ class GoodsFragment : Fragment() {
         mBinding.trackingItemList.layoutManager = LinearLayoutManager(requireContext())
         mBinding.trackingItemList.adapter = GoodsAdapter(
             requireContext(),
-            mDb.goodsDao().getByAddressId(mAddress.cpDbId)
+            mDb.goodsDao().getByAddressCpDbId(mAddress.cpDbId)
         )
 
         return mBinding.root

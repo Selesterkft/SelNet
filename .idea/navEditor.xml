@@ -19,6 +19,16 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_addressDetailFragment_to_dataEntryFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_addressDetailFragment_to_furtherInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_addressDetailFragment_to_goodsFragment">
                               <value>
                                 <LayoutPositions />
@@ -61,6 +71,30 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="dataEntryFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="999" />
+                            <option name="y" value="-243" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="furtherInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1002" />
+                            <option name="y" value="66" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -112,14 +146,7 @@
                   </entry>
                   <entry key="transportInfoFragment">
                     <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="988" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
+                      <LayoutPositions />
                     </value>
                   </entry>
                   <entry key="transportListFragment">

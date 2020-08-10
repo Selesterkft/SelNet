@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import hu.selester.seltransport.database.tables.UsersTable
 import hu.selester.seltransport.databinding.FrgLoginBinding
 import hu.selester.seltransport.dialogs.NewUserDialogFragment
 import hu.selester.seltransport.dialogs.TelNumberDialogFragment
+import hu.selester.seltransport.objects.SessionClass
 import hu.selester.seltransport.utils.AppUtils
 import hu.selester.seltransport.utils.KeyboardUtils
 import org.json.JSONObject
@@ -30,7 +32,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
     NewUserDialogFragment.OnOkPressed {
 
     lateinit var mBinding: FrgLoginBinding
-    var mSmsLoopCnt = 0
+    private var mSmsLoopCnt = 0
     private val mLoopTimeMilliSec: Long = 3000
     private val mReceiveSmsRequest = 103
     lateinit var mDb: SelTransportDatabase
@@ -45,10 +47,10 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
         if (user.size != 1) {
             AppUtils.toastShort(
                 context,
-                "Hiba az azonosítás közben"
+                getString(R.string.identification_error)
             )
         } else {
-            AppUtils.setSharedPreferences(requireContext(), "logged_user", user[0].id!!.toString())
+            SessionClass.setValue("logged_user", user[0].id!!.toString())
             val activity = requireActivity() as MainActivity
             activity.setLoggedInUser(user[0].telephoneNumber)
             findNavController().navigate(R.id.action_loginFragment_to_transportListFragment)
@@ -58,17 +60,17 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
     override fun onNewUser() {
         val newUserDialog = NewUserDialogFragment()
         newUserDialog.setTargetFragment(this, 2)
-        newUserDialog.show(parentFragmentManager, "NewUserDialogFragment")
+        newUserDialog.show(parentFragmentManager, mTag)
     }
 
     override fun onNewUserOkPressed(telNumber: String) {
         mTelephoneNumber = telNumber
         if (mDb.usersDao().getValidUserByNumber(telNumber).isNotEmpty()) {
             AppUtils.toast(
-                context, "Ez a telefonszám már létezik, kérem válassza ki a listából!"
+                context, getString(R.string.user_exists_already)
             )
         } else if (telNumber.length < 7) {
-            AppUtils.toast(context, "Kérem valós telefonszámot adjon meg!")
+            AppUtils.toast(context, getString(R.string.provide_valid_phone_number))
             onNewUser()
         } else {
             if (ContextCompat.checkSelfPermission(
@@ -89,7 +91,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
     private fun chooseTelNumber() {
         val chooseDialog = TelNumberDialogFragment()
         chooseDialog.setTargetFragment(this, 1)
-        chooseDialog.show(parentFragmentManager, "TelNumberDialogFragment")
+        chooseDialog.show(parentFragmentManager, mTag)
     }
 
     private fun onLoginBtnPressed() {
@@ -101,7 +103,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
     }
 
     private fun registerNewUser() {
-        mBinding.loginBtn.visibility = View.GONE
+        mBinding.loginLoginButton.visibility = View.GONE
         mBinding.loginProgressBar.visibility = View.VISIBLE
         mBinding.loginStatusMessage.visibility = View.VISIBLE
         mBinding.loginStatusMessage.setTextColor(
@@ -110,7 +112,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
                 R.color.colorPrimary
             )
         )
-        mBinding.loginStatusMessage.text = "Várakozás a regisztrációs SMS-re..."
+        mBinding.loginStatusMessage.text = getString(R.string.waiting_for_sms)
         AppUtils.setSharedPreferences(requireContext(), "registrationSmsReceived", "0")
         registrationRequest()
         mSmsLoopCnt = 0
@@ -158,11 +160,12 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mBinding = FrgLoginBinding.inflate(inflater)
 
+        mBinding.loginInfoText.movementMethod = LinkMovementMethod.getInstance()
         mRegistrationToken = resources.getString(R.string.reg_token)
-        mBinding.loginBtn.setOnClickListener { onLoginBtnPressed() }
+        mBinding.loginLoginButton.setOnClickListener { onLoginBtnPressed() }
         return mBinding.root
     }
 
@@ -209,11 +212,12 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
                                     registrationKey
                                 )
                             )
-                            AppUtils.setSharedPreferences(
-                                requireContext(),
+                            SessionClass.setValue(
                                 "logged_user",
                                 activeUserId.toString()
                             )
+                            val activity = requireActivity() as MainActivity
+                            activity.setLoggedInUser(mTelephoneNumber)
                             findNavController().navigate(R.id.action_loginFragment_to_transportListFragment)
 
                         } catch (e: Exception) {
@@ -233,7 +237,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
                     restoreLoginBtn()
 
                     mBinding.loginStatusMessage.text =
-                        "Nem érkezett regisztrációs SMS a kérésre!\nKérem ellenőrizze a telefonszámot!"
+                        getString(R.string.no_sms_received)
                     mBinding.loginStatusMessage.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -252,7 +256,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
 
     private fun restoreLoginBtn() {
         mBinding.loginProgressBar.visibility = View.GONE
-        mBinding.loginBtn.visibility = View.VISIBLE
+        mBinding.loginLoginButton.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
@@ -265,7 +269,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
                 grantResults.isEmpty() -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tudjuk regisztrálni,\nha nem engedélyezi bejövő SMS-ek figyelését!"
+                        getString(R.string.no_sms_permission)
                     )
                     mSmsLoopCnt = 100
                     restoreLoginBtn()
@@ -277,7 +281,7 @@ class LoginFragment : Fragment(), TelNumberDialogFragment.OnItemSelected,
                 else -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tudjuk regisztrálni,\nha nem engedélyezi bejövő SMS-ek figyelését!"
+                        getString(R.string.no_sms_permission)
                     )
                     mSmsLoopCnt = 100
                     restoreLoginBtn()

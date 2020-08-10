@@ -1,20 +1,15 @@
 package hu.selester.seltransport.fragments
 
-import android.Manifest
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.selester.seltransport.MainActivity
 import hu.selester.seltransport.R
 import hu.selester.seltransport.adapters.AddressListAdapter
 import hu.selester.seltransport.database.SelTransportDatabase
@@ -22,15 +17,13 @@ import hu.selester.seltransport.database.tables.AddressesTable
 import hu.selester.seltransport.database.tables.TaskActionsTable
 import hu.selester.seltransport.database.tables.TransportsTable
 import hu.selester.seltransport.databinding.FrgAddressListBinding
-import hu.selester.seltransport.dialogs.StatusTrackingDialogFragment
-import hu.selester.seltransport.utils.AppUtils
 
 class AddressListFragment : Fragment(), AddressListAdapter.AddressListClickListener {
     private lateinit var mBinding: FrgAddressListBinding
     private lateinit var mDb: SelTransportDatabase
     private lateinit var mAddressList: List<AddressesTable>
     private val mTag = "AddressListFragment"
-    var mTransportId = 0L
+    private var mTransportId = 0L
 
     override fun forwardClick(addressId: Long) {
         val address = mDb.addressesDao().getById(addressId)
@@ -46,6 +39,10 @@ class AddressListFragment : Fragment(), AddressListAdapter.AddressListClickListe
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val activity = requireActivity() as MainActivity
+        activity.title = resources.getString(R.string.addresses)
+        activity.showTitleIcons()
+
         mBinding = FrgAddressListBinding.inflate(inflater)
         mAddressList = mDb.addressesDao().getAddressesForTransport(mTransportId)
         mBinding.addressListList.layoutManager = LinearLayoutManager(requireContext())
@@ -54,19 +51,25 @@ class AddressListFragment : Fragment(), AddressListAdapter.AddressListClickListe
             mAddressList,
             this
         )
-        mBinding.addressListSpinner.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_single_choice,
-            arrayOf("Összes cím", "Hátralévő címek", "Kész címek")
-        )
 
-        requireActivity().title = resources.getString(R.string.addresses)
+        val spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.row_spinner_selected,
+            arrayOf(
+                getString(R.string.all_addresses),
+                getString(R.string.leftover_addresses),
+                getString(R.string.done_addresses)
+            )
+        )
+        spinnerAdapter.setDropDownViewResource(R.layout.row_spinner_dropdown_item)
+        mBinding.addressListSpinner.adapter = spinnerAdapter
+
         return mBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mTransportId = requireArguments().getLong("transport_id")
     }
 

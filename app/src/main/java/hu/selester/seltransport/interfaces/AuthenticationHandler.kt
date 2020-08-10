@@ -4,13 +4,16 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import hu.selester.seltransport.R
 import hu.selester.seltransport.database.SelTransportDatabase
+import hu.selester.seltransport.objects.SessionClass
 import hu.selester.seltransport.utils.AppUtils
 import org.json.JSONObject
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
 interface AuthenticationHandler {
     val mContext: Context
@@ -20,8 +23,10 @@ interface AuthenticationHandler {
 
     fun doAction(responseJson: JSONObject)
 
+    fun onError()
+
     fun doJob() {
-        mRequestJson.put("token", AppUtils.getSharedPreferences(mContext, "jwt_token"))
+        mRequestJson.put("token", SessionClass.getValue("jwt_token"))
         if (mRequestJson.getString("token") == "") {
             getNewToken()
         } else {
@@ -40,15 +45,16 @@ interface AuthenticationHandler {
                 },
                 Response.ErrorListener { error ->
                     error.printStackTrace()
+                    onError()
                 })
             Volley.newRequestQueue(mContext).add(jsonObjectRequest)
         }
     }
 
     fun getNewToken() {
-        val db = SelTransportDatabase.getInstance(mContext)!!
+        val db = SelTransportDatabase.getInstance(mContext)
         val users = db.usersDao().getValidUserById(
-            AppUtils.getSharedPreferences(mContext, "logged_user").toLong()
+            SessionClass.getValue("logged_user").toLong()
         )
         if (users.size != 1) {
             throw IndexOutOfBoundsException("AuthenticationHandler: getNewToken: user size is ${users.size}, should be 1")
@@ -77,20 +83,25 @@ interface AuthenticationHandler {
         requestJson.put("header", headerJson)
         requestJson.put("body", bodyJson)
 
-        val url = mContext.resources.getString(R.string.root_url) + "/getToken.php"
+        val url = mContext.getString(R.string.root_url) + "/getToken.php"
         Log.i("URL", url)
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, requestJson,
             Response.Listener { resultJSON ->
                 Log.i(mTag, resultJSON.toString())
                 val token = resultJSON.getString("token")
-                AppUtils.setSharedPreferences(mContext, "jwt_token", token)
+                SessionClass.setValue("jwt_token", token)
                 onTokenArrived(token)
             },
             Response.ErrorListener { error ->
                 error.printStackTrace()
+                onError()
             })
-        Volley.newRequestQueue(mContext).add(jsonObjectRequest)
+        val hStack = HurlStack(null, HttpsURLConnection.getDefaultSSLSocketFactory())
+        Volley.newRequestQueue(
+            mContext,
+            hStack
+        ).add(jsonObjectRequest)
     }
 
     fun onTokenArrived(token: String) {
@@ -102,6 +113,7 @@ interface AuthenticationHandler {
             },
             Response.ErrorListener { error ->
                 error.printStackTrace()
+                onError()
             })
         Volley.newRequestQueue(mContext).add(jsonObjectRequest)
     }

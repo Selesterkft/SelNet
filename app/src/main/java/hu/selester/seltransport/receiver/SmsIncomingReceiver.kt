@@ -17,11 +17,11 @@ class SmsIncomingReceiver : BroadcastReceiver() {
                 val pdusObj = bundle.get("pdus") as Array<*>
                 for (i in pdusObj.indices) {
                     val currentMessage: SmsMessage
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    currentMessage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         val format = bundle.getString("format")
-                        currentMessage = SmsMessage.createFromPdu(pdusObj[i] as ByteArray, format)
+                        SmsMessage.createFromPdu(pdusObj[i] as ByteArray, format)
                     } else {
-                        currentMessage = SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
+                        SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
                     }
                     val message = currentMessage.displayMessageBody
                     val registrationKey = message.split("#")[1].substring(0, 16)

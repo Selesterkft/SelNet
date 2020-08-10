@@ -13,9 +13,9 @@ data class GoodsTable(
     var description2: String,
     var amount: Int,
     var packaging: String,
-    var weight: Int,
-    var space: Int,
-    var volume: Int,
+    var weight: Double,
+    var space: Double,
+    var volume: Double,
     var sizeLength: Int,
     var sizeWidth: Int,
     var sizeHeight: Int

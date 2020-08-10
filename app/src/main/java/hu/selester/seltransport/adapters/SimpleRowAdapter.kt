@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.selester.seltransport.R
+import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.database.tables.TaskActionsTable
 import hu.selester.seltransport.database.tables.UsersTable
+import hu.selester.seltransport.utils.AppUtils
 import kotlinx.android.synthetic.main.row_simple.view.*
 
 class SimpleRowAdapter(
-    val context: Context,
-    private var dataList: List<Any>,
-    private val click: RowClickListener
+    private val mContext: Context,
+    private var mDataList: MutableList<Any>,
+    private val mClick: RowClickListener
 ) : RecyclerView.Adapter<SimpleRowAdapter.BaseViewHolder<*>>() {
 
     private val mTag = "SimpleRowAdapter"
@@ -24,9 +26,9 @@ class SimpleRowAdapter(
         const val TYPE_TASK_ACTION = 1
     }
 
-    abstract class BaseViewHolder<T>(itemView: View) :
+    abstract inner class BaseViewHolder<T>(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        abstract fun bind(item: T)
+        abstract fun bind(item: T, position: Int)
     }
 
     interface RowClickListener {
@@ -38,10 +40,11 @@ class SimpleRowAdapter(
         private var mPicture = view.row_simple_picture
         private var rootView = itemView
 
-        override fun bind(item: UsersTable) {
-            mTelephoneNumber.text = item.telephoneNumber
+        override fun bind(item: UsersTable, position: Int) {
+            val phoneText = "+${item.telephoneNumber}"
+            mTelephoneNumber.text = phoneText
             mPicture.setImageResource(R.drawable.mobile_phone)
-            rootView.setOnClickListener { click.simpleRowClick(item.id!!, TYPE_USER) }
+            rootView.setOnClickListener { mClick.simpleRowClick(item.id!!, TYPE_USER) }
         }
     }
 
@@ -50,27 +53,45 @@ class SimpleRowAdapter(
         private var mPicture = view.row_simple_picture
         private var rootView = itemView
 
-        override fun bind(item: TaskActionsTable) {
+        override fun bind(item: TaskActionsTable, position: Int) {
             mText.text = item.name
-            mPicture.setImageResource(
-                when (item.code) {
-                    "tracking" -> R.drawable.tracking
-                    "map" -> R.drawable.poi
-                    "goods" -> R.drawable.goods
-                    "signature" -> R.drawable.signature
-                    "scan" -> R.drawable.camera
-                    "show_info" -> R.drawable.info
-                    "get_data" -> R.drawable.get_data
-                    else -> {
-                        Log.e(mTag, "Unknown task code")
-                        R.drawable.icon_info
+
+            when (item.code) {
+                AppUtils.TRACKING -> {
+                    mPicture.setImageResource(R.drawable.tracking)
+                }
+                AppUtils.MAP -> {
+                    mPicture.setImageResource(R.drawable.poi)
+                }
+                AppUtils.GOODS -> {
+                    mPicture.setImageResource(R.drawable.goods)
+                }
+                AppUtils.SIGNATURE -> {
+                    mPicture.setImageResource(R.drawable.signature)
+                }
+                AppUtils.SCAN -> {
+                    mPicture.setImageResource(R.drawable.camera)
+                }
+                AppUtils.SHOW_INFO -> {
+                    mPicture.setImageResource(R.drawable.info)
+                    val db = SelTransportDatabase.getInstance(mContext)
+                    val address = db.addressesDao().getByCpDbId(item.externalId)
+                    if (address.infoField == "") {
+                        mDataList.removeAt(position)
+                        notifyDataSetChanged()
                     }
                 }
-            )
-            rootView.setOnClickListener { click.simpleRowClick(item.id!!, TYPE_TASK_ACTION) }
+                AppUtils.GET_DATA -> {
+                    mPicture.setImageResource(R.drawable.get_data)
+                }
+                else -> {
+                    Log.e(mTag, "Unknown task code")
+                    mPicture.setImageResource(R.drawable.icon_info)
+                }
+            }
+            rootView.setOnClickListener { mClick.simpleRowClick(item.id!!, TYPE_TASK_ACTION) }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return when (viewType) {
@@ -90,19 +111,19 @@ class SimpleRowAdapter(
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-        val element = dataList[position]
+        val element = mDataList[position]
         when (holder) {
-            is UserViewHolder -> holder.bind(element as UsersTable)
-            is TaskActionViewHolder -> holder.bind(element as TaskActionsTable)
+            is UserViewHolder -> holder.bind(element as UsersTable, position)
+            is TaskActionViewHolder -> holder.bind(element as TaskActionsTable, position)
         }
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return mDataList.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (dataList[position]) {
+        return when (mDataList[position]) {
             is UsersTable -> TYPE_USER
             is TaskActionsTable -> TYPE_TASK_ACTION
             else -> throw IllegalArgumentException("Invalid data at $position")

@@ -27,37 +27,37 @@ class GoodsAdapter(
         private val mDimensions = itemView.row_goods_dimensions
 
         fun bind(item: GoodsTable) {
-            val description = SpannableStringBuilder().append("Azonosító szám: ")
+            val description = SpannableStringBuilder().append(mContext.getString(R.string.id_number))
                 .bold { append(item.description) }
             mDescription.text = description
             val description2 = SpannableStringBuilder()
-                .append("Megnevezés: ")
+                .append(mContext.getString(R.string.description))
                 .bold { append(item.description2) }
             mDescription2.text = description2
             val amount = SpannableStringBuilder()
-                .append("Darab: ")
+                .append(mContext.getString(R.string.amount))
                 .bold { append("${item.amount}") }
             mAmount.text = amount
             val packaging = SpannableStringBuilder()
-                .append("Csomagolás: ")
+                .append(mContext.getString(R.string.packaging))
                 .bold { append(item.packaging) }
             mPackaging.text = packaging
             val weight = SpannableStringBuilder()
-                .append("Súly: ")
+                .append(mContext.getString(R.string.weight))
                 .bold { append("${item.weight}kg") }
             mWeight.text = weight
             val space = SpannableStringBuilder()
-                .append("Rakhossz: ")
+                .append(mContext.getString(R.string.space))
                 .bold { append("${item.space}LM") }
             mSpace.text = space
             val volume = SpannableStringBuilder()
-                .append("Térfogat: ")
+                .append(mContext.getString(R.string.volume))
                 .bold { append("${item.volume}m3") }
             mVolume.text = volume
             val dimensions = SpannableStringBuilder()
-                .append("Dimenzió: ")
+                .append(mContext.getString(R.string.dimensions))
                 .bold { append("${item.sizeLength}x${item.sizeWidth}x${item.sizeHeight}") }
-                .append(" (HxSzxM)")
+                .append(mContext.getString(R.string.l_w_h))
             mDimensions.text = dimensions
         }
     }

@@ -7,15 +7,32 @@ import android.graphics.Matrix
 import android.location.Address
 import android.location.Geocoder
 import android.media.ExifInterface
+import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
+import hu.selester.seltransport.R
+import hu.selester.seltransport.database.tables.ActionDataFieldsTable
+import hu.selester.seltransport.database.tables.LogisticStatusesTable
+import hu.selester.seltransport.database.tables.TaskActionsTable
 import java.io.IOException
 import java.security.MessageDigest
+import java.util.*
 
-class AppUtils {
+abstract class AppUtils {
     companion object {
+
+        // task action codes
+        const val TRACKING = "tracking"
+        const val MAP = "map"
+        const val GOODS = "goods"
+        const val SIGNATURE = "signature"
+        const val SCAN = "scan"
+        const val SHOW_INFO = "show_info"
+        const val GET_DATA = "get_data"
+        const val NESTED = "nested"
+
         private const val mTag = "AppUtils"
 
         fun sha512(input: String): String {
@@ -124,7 +141,46 @@ class AppUtils {
             matrix.postRotate(angle)
             return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
         }
+
+        private fun getLocaleFromContext(context: Context): Locale {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales.get(0)
+            } else {
+                context.resources.configuration.locale
+            }
+        }
+
+        fun getActionDataFieldName(dataField: ActionDataFieldsTable, context: Context): String {
+            return when (getLocaleFromContext(context).language) {
+                "hu" -> dataField.hu
+                "de" -> dataField.de
+                "en" -> dataField.en
+                else -> throw java.lang.IllegalArgumentException("Unknown locale")
+            }
+        }
+
+        fun getStatusName(status: LogisticStatusesTable, context: Context): String {
+            return when (getLocaleFromContext(context).language) {
+                "hu" -> status.hu
+                "de" -> status.de
+                "en" -> status.en
+                else -> throw java.lang.IllegalArgumentException("Unknown locale")
+            }
+        }
+
+        fun getActionName(action: TaskActionsTable, context: Context): String {
+            return when (action.code) {
+                TRACKING -> context.getString(R.string.tracking)
+                MAP -> context.getString(R.string.map)
+                GOODS -> context.getString(R.string.goods_details)
+                SIGNATURE -> context.getString(R.string.signature)
+                SCAN -> context.getString(R.string.doc_scan)
+                GET_DATA -> context.getString(R.string.data_entry)
+                SHOW_INFO -> context.getString(R.string.further_information)
+                NESTED -> action.name
+                else -> throw java.lang.IllegalArgumentException("Unknown action code")
+            }
+        }
+        fun Double.format(digits: Int) = "%.${digits}f".format(this)
     }
-
-
 }

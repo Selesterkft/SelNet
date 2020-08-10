@@ -70,7 +70,7 @@ class InputDialogFragment : DialogFragment() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                AppUtils.toast(context, "Hiba: Nem értelmezhető QR kód!")
+                AppUtils.toast(context, getString(R.string.unknown_qr_code))
 
             } else {
                 Log.i(mTag, result.contents)

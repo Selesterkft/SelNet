@@ -4,8 +4,8 @@ class SessionClass {
     companion object {
         private val dataMap = mutableMapOf<String, String>()
 
-        fun getValue(key: String): String? {
-            return dataMap[key]
+        fun getValue(key: String): String {
+            return if (dataMap.containsKey(key)) dataMap[key]!! else ""
         }
 
         fun setValue(key: String, value: String) {

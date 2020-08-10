@@ -16,7 +16,7 @@ import java.net.URL
 
 class UploadFilesThread(val context: Context?) : Thread() {
 
-    private val db: SelTransportDatabase = SelTransportDatabase.getInstance(context!!)!!
+    private val db: SelTransportDatabase = SelTransportDatabase.getInstance(context!!)
     val mTag = "UploadFilesThread"
 
     override fun run() {
@@ -59,7 +59,7 @@ class UploadFilesThread(val context: Context?) : Thread() {
     }
 
     fun errorUpload(appID: Long) {
-        val photoData = db.photosDao().getById(appID)
+        val photoData = db.picturesDao().getById(appID)
         Log.i(mTag, "tried: " + photoData.tried)
         if (photoData.tried < 6) {
         } else {

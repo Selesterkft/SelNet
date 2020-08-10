@@ -23,11 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import hu.selester.seltransport.MainActivity
 import hu.selester.seltransport.R
 import hu.selester.seltransport.adapters.PhotosListAdapter
 import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.database.tables.AddressesTable
-import hu.selester.seltransport.database.tables.PhotosTable
+import hu.selester.seltransport.database.tables.PicturesTable
 import hu.selester.seltransport.databinding.FrgDocumentScanBinding
 import hu.selester.seltransport.utils.AppUtils
 import kotlinx.android.synthetic.main.dialog_show_image.view.*
@@ -48,7 +49,7 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
     private lateinit var mAddress: AddressesTable
 
     override fun onItemClick(id: Long, position: Int) {
-        val photo = mDb.photosDao().getById(id)
+        val photo = mDb.picturesDao().getById(id)
 
         Log.i(mTag, "SHOW PICTURES: ${photo.filePath}")
         val settingsDialog = Dialog(requireContext())
@@ -68,13 +69,13 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
 
     private fun onDelClick(id: Long, position: Int) {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Biztos, hogy törli a fotót?")
-        builder.setPositiveButton("IGEN") { dialog, _ ->
-            mDb.photosDao().deleteById(id)
+        builder.setTitle(getString(R.string.delete_photo_confirm))
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+            mDb.picturesDao().deleteById(id)
             (mBinding.transportPhotoList.adapter!! as PhotosListAdapter).removeAt(position)
             dialog.cancel()
         }
-        builder.setNegativeButton("NEM") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
             dialog.cancel()
         }
         builder.show()
@@ -85,8 +86,12 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val activity = requireActivity() as MainActivity
+        activity.title = getString(R.string.doc_scan)
+        activity.showTitleIcons()
+
         mBinding = FrgDocumentScanBinding.inflate(inflater)
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mAddress = mDb.addressesDao().getById(requireArguments().getLong("address_id"))
 
         mBinding.transportPhotoCameraLayout.setOnClickListener { takePics() }
@@ -95,26 +100,25 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
             GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
         mBinding.transportPhotoList.adapter = PhotosListAdapter(
             requireContext(),
-            mDb.photosDao().getPhotosForAddress(mAddress.id!!),
+            mDb.picturesDao().getPhotosForAddress(mAddress.id!!),
             this
         )
-        requireActivity().title = getString(R.string.doc_scan)
 
         mBinding.transportPhotoCamera.rowSimplePicture.setImageResource(R.drawable.camera)
         mBinding.transportPhotoCamera.rowSimpleText.text = getString(R.string.doc_scan)
         mBinding.transportPhotoFile.rowSimplePicture.setImageResource(R.drawable.search)
         mBinding.transportPhotoFile.rowSimpleText.text = getString(R.string.search_on_phone)
 
-        mBinding.transphotoHead.partAddressHeaderLoadImage.setImageResource(
+        mBinding.transportPhotoHead.partAddressHeaderLoadImage.setImageResource(
             if (mAddress.type == 1) R.drawable.address_loading
             else R.drawable.address_unloading
         )
         val cityZip = "${mAddress.country}, ${mAddress.zip}, ${mAddress.city}"
-        mBinding.transphotoHead.partAddressHeaderCityZip.text = cityZip
-        mBinding.transphotoHead.partAddressHeaderAddress.text = mAddress.address
+        mBinding.transportPhotoHead.partAddressHeaderCityZip.text = cityZip
+        mBinding.transportPhotoHead.partAddressHeaderAddress.text = mAddress.address
         val dateBhr = "${AppUtils.formatDate(mAddress.date)} ${mAddress.businessHours}"
-        mBinding.transphotoHead.partAddressHeaderDateBusinessHours.text = dateBhr
-        mBinding.transphotoHead.partAddressHeaderAddressName.text = mAddress.name
+        mBinding.transportPhotoHead.partAddressHeaderDateBusinessHours.text = dateBhr
+        mBinding.transportPhotoHead.partAddressHeaderAddressName.text = mAddress.name
 
         return mBinding.root
     }
@@ -131,7 +135,7 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
             } else {
                 AppUtils.toast(
                     context,
-                    "Ha nem engedélyezi a kamera használatát, nem tud képeket készíteni!"
+                    getString(R.string.no_camera_permission)
                 )
             }
         }
@@ -142,7 +146,7 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
             } else {
                 AppUtils.toast(
                     context,
-                    "Ha nem engedélyezi a fájlok kiválasztását, nem tud fájlokat hozzáadni!"
+                    getString(R.string.no_camera_permission)
                 )
             }
         }
@@ -209,7 +213,7 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.i(mTag, "ResultCode - $resultCode RequestCode - $requestCode")
+        Log.i(mTag, "ResultCode - $resultCode, RequestCode - $requestCode")
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 mPickActionRequestCode -> {
@@ -247,26 +251,29 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
                 }
                 mCameraPermissionRequestCode -> {
                     Log.i(mTag, mCurrentPhotoPath)
-
                 }
             }
             try {
-                val date = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date())
-                val time = SimpleDateFormat("hh:mm", Locale.getDefault()).format(Date())
-                val item = PhotosTable(
-                    null,
-                    mAddress.id!!,
-                    date,
-                    time,
-                    mCurrentPhotoPath,
-                    false,
-                    0
-                )
-                mDb.photosDao().insertPhoto(item)
-                (mBinding.transportPhotoList.adapter!! as PhotosListAdapter).addItem(item)
+                if (mDb.picturesDao().getPhotosByAddressAndPath(mAddress.id!!, mCurrentPhotoPath).isNotEmpty()) {
+                    AppUtils.toast(context, getString(R.string.photo_added_already))
+                } else {
+                    val date = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date())
+                    val time = SimpleDateFormat("hh:mm", Locale.getDefault()).format(Date())
+                    val item = PicturesTable(
+                        null,
+                        mAddress.id!!,
+                        date,
+                        time,
+                        mCurrentPhotoPath,
+                        false,
+                        0
+                    )
+                    mDb.picturesDao().insertPhoto(item)
+                    (mBinding.transportPhotoList.adapter!! as PhotosListAdapter).addItem(item)
+                }
             } catch (ex: java.lang.Exception) {
                 ex.printStackTrace()
-                AppUtils.toast(context, "Hiba a kép mentése közben!")
+                AppUtils.toast(context, getString(R.string.photo_save_error))
             }
         }
     }
@@ -316,7 +323,7 @@ class DocumentScanFragment : Fragment(), PhotosListAdapter.OnItemClickListener {
     private fun photoListRefresh() {
         Log.i(mTag, "handler")
         (mBinding.transportPhotoList.adapter!! as PhotosListAdapter).resetList(
-            mDb.photosDao().getPhotosForAddress(mAddress.id!!)
+            mDb.picturesDao().getPhotosForAddress(mAddress.id!!)
         )
     }
 

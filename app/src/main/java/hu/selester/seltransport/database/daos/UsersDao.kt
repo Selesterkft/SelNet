@@ -23,6 +23,9 @@ interface UsersDao {
     @Query("SELECT * FROM UsersTable WHERE :telNumber = telephoneNumber AND masterKey IS NOT NULL AND registrationKey IS NOT NULL")
     fun getValidUserByNumber(telNumber: String): List<UsersTable>
 
+    @Query("SELECT * FROM UsersTable WHERE telephoneNumber LIKE '%' || :telNumber || '%' AND masterKey IS NOT NULL AND registrationKey IS NOT NULL")
+    fun getValidUserLikeNumber(telNumber: String): List<UsersTable>
+
     @Query("SELECT * FROM UsersTable WHERE :id = id")
     fun getUserById(id: Long): List<UsersTable>
 

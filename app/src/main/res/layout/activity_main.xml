@@ -45,12 +45,12 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/main_nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="end"
         app:headerLayout="@layout/part_menu_header"
+        app:itemIconSize="35dp"
         app:itemIconTint="@color/white"
-        app:itemTextAppearance="@style/menu_text_style"
+        app:itemTextAppearance="@style/MenuTextStyle"
         app:menu="@menu/menu" />
-
 </androidx.drawerlayout.widget.DrawerLayout>
 

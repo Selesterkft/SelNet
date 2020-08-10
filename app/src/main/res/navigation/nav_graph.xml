@@ -1,134 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/nav_graph"
-        app:startDestination="@id/loginFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
     <fragment
-            android:id="@+id/transportListFragment"
-            android:name="hu.selester.seltransport.fragments.TransportListFragment"
-            android:label="TransportListFragment"
-            tools:layout="@layout/frg_transport_list">
+        android:id="@+id/transportListFragment"
+        android:name="hu.selester.seltransport.fragments.TransportListFragment"
+        android:label="TransportListFragment"
+        tools:layout="@layout/frg_transport_list">
         <action
-                android:id="@+id/action_transportListFragment_to_addressListFragment"
-                app:destination="@id/addressListFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_transportListFragment_to_addressListFragment"
+            app:destination="@id/addressListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-            android:id="@+id/signatureFragment"
-            android:name="hu.selester.seltransport.fragments.SignatureFragment"
-            android:label="SignatureFragment"
-            tools:layout="@layout/frg_signature">
+        android:id="@+id/signatureFragment"
+        android:name="hu.selester.seltransport.fragments.SignatureFragment"
+        android:label="SignatureFragment"
+        tools:layout="@layout/frg_signature">
         <argument
-                android:name="address_id"
-                app:argType="long" />
+            android:name="address_id"
+            app:argType="long" />
     </fragment>
     <fragment
-            android:id="@+id/loginFragment"
-            android:name="hu.selester.seltransport.fragments.LoginFragment"
-            android:label="LoginFragment"
-            tools:layout="@layout/frg_login">
+        android:id="@+id/loginFragment"
+        android:name="hu.selester.seltransport.fragments.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/frg_login">
         <action
-                android:id="@+id/action_loginFragment_to_transportListFragment"
-                app:destination="@id/transportListFragment"
-                app:popUpTo="@id/loginFragment"
-                app:popUpToInclusive="true" />
+            android:id="@+id/action_loginFragment_to_transportListFragment"
+            app:destination="@id/transportListFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
-            android:id="@+id/transportPhotoFragment"
-            android:name="hu.selester.seltransport.fragments.DocumentScanFragment"
-            android:label="TransPhotoFragment"
-            tools:layout="@layout/frg_document_scan">
+        android:id="@+id/transportPhotoFragment"
+        android:name="hu.selester.seltransport.fragments.DocumentScanFragment"
+        android:label="TransPhotoFragment"
+        tools:layout="@layout/frg_document_scan">
         <argument
-                android:name="address_id"
-                app:argType="long" />
+            android:name="address_id"
+            app:argType="long" />
     </fragment>
     <fragment
-            android:id="@+id/transportInfoFragment"
-            android:name="hu.selester.seltransport.fragments.TransportInfoFragment"
-            android:label="TransportInfoFragment"
-            tools:layout="@layout/frg_info">
+        android:id="@+id/addressListFragment"
+        android:name="hu.selester.seltransport.fragments.AddressListFragment"
+        android:label="AddressListFragment"
+        tools:layout="@layout/frg_address_list">
+        <action
+            android:id="@+id/action_addressListFragment_to_addressDetailFragment"
+            app:destination="@id/addressDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
-                android:name="name"
-                android:defaultValue="null"
-                app:argType="string" />
-        <argument
-                android:name="address"
-                android:defaultValue="null"
-                app:argType="string" />
-        <argument
-                android:name="short_info"
-                android:defaultValue="null"
-                app:argType="string" />
-        <argument
-                android:name="long_info"
-                android:defaultValue="null"
-                app:argType="string" />
+            android:name="transport_id"
+            android:defaultValue="0L"
+            app:argType="long" />
     </fragment>
     <fragment
-            android:id="@+id/addressListFragment"
-            android:name="hu.selester.seltransport.fragments.AddressListFragment"
-            android:label="AddressListFragment"
-            tools:layout="@layout/frg_address_list">
-        <action
-                android:id="@+id/action_addressListFragment_to_addressDetailFragment"
-                app:destination="@id/addressDetailFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
+        android:id="@+id/goodsFragment"
+        android:name="hu.selester.seltransport.fragments.GoodsFragment"
+        android:label="GoodsFragment"
+        tools:layout="@layout/frg_goods">
         <argument
-                android:name="transport_id"
-                android:defaultValue="0L"
-                app:argType="long" />
+            android:name="address_id"
+            app:argType="long" />
     </fragment>
     <fragment
-            android:id="@+id/goodsFragment"
-            android:name="hu.selester.seltransport.fragments.GoodsFragment"
-            android:label="GoodsFragment"
-            tools:layout="@layout/frg_goods">
+        android:id="@+id/addressDetailFragment"
+        android:name="hu.selester.seltransport.fragments.AddressDetailFragment"
+        android:label="AddressDetailFragment"
+        tools:layout="@layout/frg_address_detail">
+        <action
+            android:id="@+id/action_addressDetailFragment_to_transportPhotoFragment"
+            app:destination="@id/transportPhotoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_addressDetailFragment_to_signatureFragment"
+            app:destination="@id/signatureFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_addressDetailFragment_to_goodsFragment"
+            app:destination="@id/goodsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_addressDetailFragment_to_furtherInfoFragment"
+            app:destination="@id/furtherInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_addressDetailFragment_to_dataEntryFragment"
+            app:destination="@id/dataEntryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
-                android:name="address_id"
-                app:argType="long" />
+            android:name="address_id"
+            app:argType="long" />
     </fragment>
     <fragment
-            android:id="@+id/addressDetailFragment"
-            android:name="hu.selester.seltransport.fragments.AddressDetailFragment"
-            android:label="AddressDetailFragment"
-            tools:layout="@layout/frg_address_detail">
-        <action
-                android:id="@+id/action_addressDetailFragment_to_transportPhotoFragment"
-                app:destination="@id/transportPhotoFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
-        <action
-                android:id="@+id/action_addressDetailFragment_to_signatureFragment"
-                app:destination="@id/signatureFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
-        <action
-                android:id="@+id/action_addressDetailFragment_to_transportInfoFragment"
-                app:destination="@id/transportInfoFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
-        <action
-                android:id="@+id/action_addressDetailFragment_to_goodsFragment"
-                app:destination="@id/goodsFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
+        android:id="@+id/furtherInfoFragment"
+        android:name="hu.selester.seltransport.fragments.FurtherInfoFragment"
+        android:label="FurtherInfoFragment"
+        tools:layout="@layout/frg_further_info">
         <argument
-                android:name="address_id"
-                app:argType="long" />
+            android:name="address_id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/dataEntryFragment"
+        android:name="hu.selester.seltransport.fragments.DataEntryFragment"
+        android:label="DataEntryFragment"
+        tools:layout="@layout/frg_data_entry">
+        <argument
+            android:name="address_id"
+            app:argType="long" />
+        <argument
+            android:name="action_id"
+            app:argType="long" />
     </fragment>
 </navigation>

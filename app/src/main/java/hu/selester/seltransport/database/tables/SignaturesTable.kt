@@ -6,5 +6,6 @@ import java.io.Serializable
 
 @Entity
 data class SignaturesTable(
-    @PrimaryKey(autoGenerate = false) var id: Long?
+    @PrimaryKey(autoGenerate = false) var id: Long?,
+    var addressId: Long
 ) : Serializable

@@ -2,6 +2,8 @@ package hu.selester.seltransport.dialogs
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +14,24 @@ import hu.selester.seltransport.adapters.SimpleRowAdapter
 import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.databinding.DialogTelephoneNumberBinding
 
+
 class TelNumberDialogFragment : DialogFragment(), SimpleRowAdapter.RowClickListener {
-    lateinit var binding: DialogTelephoneNumberBinding
-    lateinit var mOnItemSelected: OnItemSelected
+    private lateinit var mBinding: DialogTelephoneNumberBinding
+    private lateinit var mOnItemSelected: OnItemSelected
+    private lateinit var mDb: SelTransportDatabase
 
     interface OnItemSelected {
         fun onUserSelected(id: Long)
         fun onNewUser()
+    }
+
+    fun resetAdapter(telephoneNumber: String) {
+        val users = mDb.usersDao().getValidUserLikeNumber(telephoneNumber.toString())
+        mBinding.dialogTelNumList.adapter = SimpleRowAdapter(
+            requireContext(),
+            users.toMutableList(),
+            this
+        )
     }
 
     override fun onCreateView(
@@ -26,21 +39,38 @@ class TelNumberDialogFragment : DialogFragment(), SimpleRowAdapter.RowClickListe
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DialogTelephoneNumberBinding.inflate(inflater)
-        val users = SelTransportDatabase.getInstance(requireContext())!!.usersDao().getValidUsers()
-        binding.dialogTelNumList.layoutManager = LinearLayoutManager(requireContext())
-        binding.dialogTelNumList.adapter = SimpleRowAdapter(
+        mBinding = DialogTelephoneNumberBinding.inflate(inflater)
+        mDb = SelTransportDatabase.getInstance(requireContext())
+        val users = mDb.usersDao().getValidUsers()
+        mBinding.dialogTelNumList.layoutManager = LinearLayoutManager(requireContext())
+        mBinding.dialogTelNumList.adapter = SimpleRowAdapter(
             requireContext(),
-            users,
+            users.toMutableList(),
             this
         )
 
-        binding.dialogTelNumNewUser.setOnClickListener {
+
+        mBinding.dialogTelNumSearchText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                //do nothing
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                resetAdapter(s.toString())
+                //do nothing
+            }
+        })
+
+        mBinding.dialogTelNumNewUser.setOnClickListener {
             mOnItemSelected.onNewUser()
             dialog!!.dismiss()
         }
 
-        return binding.root
+        return mBinding.root
     }
 
     override fun simpleRowClick(id: Long, type: Int) {

@@ -21,13 +21,15 @@ import hu.selester.seltransport.adapters.TransportListAdapter
 import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.database.tables.*
 import hu.selester.seltransport.databinding.FrgTransportListBinding
+import hu.selester.seltransport.dialogs.SimpleDialogFragment
 import hu.selester.seltransport.interfaces.AuthenticationHandler
 import hu.selester.seltransport.objects.SessionClass
 import hu.selester.seltransport.utils.AppUtils
 import org.json.JSONArray
 import org.json.JSONObject
 
-class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener {
+class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener,
+    SimpleDialogFragment.ButtonListener {
 
     private lateinit var mBinding: FrgTransportListBinding
     private lateinit var mDb: SelTransportDatabase
@@ -35,6 +37,7 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
     private val mCallPhoneRequest = 104
     private lateinit var mChosenPhoneNumber: String
     private val mTag = "TransportListFragment"
+    private lateinit var mLockDialog: SimpleDialogFragment
 
     override fun click(id: Long) {
         val bundle = bundleOf("transport_id" to id)
@@ -58,10 +61,23 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                 )
             } else {
                 val intent = Intent(Intent.ACTION_CALL)
-                intent.setData(Uri.parse("tel:$phoneNumber"))
+                intent.data = Uri.parse("tel:$phoneNumber")
                 requireContext().startActivity(intent)
             }
         }
+    }
+
+    override fun lockTransport(id: Long) {
+        val mainText = getString(R.string.close_transport_confirm)
+        mLockDialog = SimpleDialogFragment(
+            this,
+            resources.getString(R.string.lock_transport),
+            mainText,
+            resources.getString(R.string.cancel),
+            resources.getString(R.string.lock)
+        )
+        mLockDialog.setTargetFragment(this, 3)
+        mLockDialog.show(parentFragmentManager, mTag)
     }
 
     override fun onRequestPermissionsResult(
@@ -74,7 +90,7 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                 grantResults.isEmpty() -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tud telefonhívást indítani, ha nem engedélyezi a telefonhívásokat!"
+                        getString(R.string.no_call_permission)
                     )
                 }
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
@@ -83,7 +99,7 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                 else -> {
                     AppUtils.toast(
                         requireContext(),
-                        "Nem tud telefonhívást indítani, ha nem engedélyezi a telefonhívásokat!"
+                        getString(R.string.no_call_permission)
                     )
                 }
             }
@@ -95,6 +111,10 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val activity = requireActivity() as MainActivity
+        activity.title = resources.getString(R.string.transports)
+        activity.showTitleIcons()
+
         mBinding = FrgTransportListBinding.inflate(inflater)
         mBinding.transportListList.layoutManager = LinearLayoutManager(context)
         mBinding.transportListList.adapter = TransportListAdapter(
@@ -102,16 +122,16 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
             mTransportList,
             this
         )
-        (requireActivity() as MainActivity).showTitleIcons()
-        requireActivity().title = resources.getString(R.string.transports)
+
+        loadData()
+
         return mBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
-        AppUtils.setSharedPreferences(requireContext(), "jwt_token", "")
-        loadData()
+        mDb = SelTransportDatabase.getInstance(requireContext())
+        SessionClass.setValue("jwt_token", "")
     }
 
     inner class TransportDataGetter(
@@ -122,9 +142,14 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
         override val mRequestUrl = resources.getString(R.string.root_url) + "/getTransportData.php"
         override val mTag = "TransportDataGetter"
 
+        override fun onError() {
+            mBinding.transportListProgressBar.visibility = View.GONE
+            mBinding.transportListStatusMessage.text = ""
+            AppUtils.toast(context, getString(R.string.communication_error))
+        }
+
         override fun doAction(responseJson: JSONObject) {
-            AppUtils.setSharedPreferences(
-                mContext,
+            SessionClass.setValue(
                 "jwt_token",
                 responseJson.getJSONObject("newToken").getString("token")
             )
@@ -138,12 +163,19 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
 
             } catch (e: Exception) {
                 Log.e(mTag, "Error: ${e.printStackTrace()}")
-                AppUtils.toast(mContext, "Hiba a kommunikációban!")
             }
         }
     }
 
     private fun loadData() {
+        mBinding.transportListList.adapter = TransportListAdapter(
+            requireContext(),
+            emptyList(),
+            this
+        )
+        mBinding.transportListProgressBar.visibility = View.VISIBLE
+        mBinding.transportListStatusMessage.text = getString(R.string.data_loading)
+
         val headerJson = JSONObject()
         headerJson.put("taskType", "TRNSP")
         headerJson.put("interface", "1001")
@@ -163,11 +195,12 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
 
     private fun processData(jsonData: JSONArray) {
         // TODO: this shouldn't be deleted
-        mDb.transportsDao().deleteAllData()
+        mDb.actionDataFieldsDao().deleteAllData()
         mDb.addressesDao().deleteAllData()
-        mDb.taskActionsDao().deleteAllData()
         mDb.goodsDao().deleteAllData()
         mDb.logisticStatusesDao().deleteAllData()
+        mDb.taskActionsDao().deleteAllData()
+        mDb.transportsDao().deleteAllData()
 
         for (transportIt in 0 until jsonData.length()) {
             val transportJson = jsonData.getJSONObject(transportIt)
@@ -199,7 +232,7 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
             )
         }
         mTransportList = mDb.transportsDao().getAllData()
-        loadListData()
+        loadList()
     }
 
     private fun loadStatuses(statusArray: JSONArray) {
@@ -271,9 +304,9 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                 goodsItem.getString("descr2"),
                 goodsItem.getInt("pcs"),
                 goodsItem.getString("packaging"),
-                goodsItem.getInt("weight"),
-                goodsItem.getInt("space"),
-                goodsItem.getInt("volume"),
+                goodsItem.getDouble("weight"),
+                goodsItem.getDouble("space"),
+                goodsItem.getDouble("volume"),
                 goodsItem.getInt("sizeLength"),
                 goodsItem.getInt("sizeWidth"),
                 goodsItem.getInt("sizeHeight")
@@ -287,6 +320,31 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                 actionArray.getJSONObject(actionIt),
                 actionArray.getJSONObject(actionIt).getLong("addressId"),
                 false
+            )
+        }
+    }
+
+    private fun loadActionDataFields(
+        dataFields: JSONArray
+    ) {
+        for (fieldIt in 0 until dataFields.length()) {
+            val dataField = dataFields.getJSONObject(fieldIt)
+            mDb.actionDataFieldsDao().insertAddress(
+                ActionDataFieldsTable(
+                    null,
+                    dataField.getLong("id"),
+                    dataField.getLong("actionId"),
+                    dataField.getString("description_hu"),
+                    dataField.getString("description_en"),
+                    dataField.getString("description_de"),
+                    when (dataField.getString("dataType")) {
+                        "integer" -> 1
+                        "string" -> 2
+                        "datetime" -> 3
+                        else -> throw java.lang.IllegalArgumentException("Unknown data field type")
+                    },
+                    ""
+                )
             )
         }
     }
@@ -308,6 +366,10 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
                     isSubTask
                 )
             )
+            val asd = action.get("dataFields")
+            if (asd is JSONObject) {
+                loadActionDataFields(action.getJSONObject("dataFields").getJSONArray("dataField"))
+            }
         } else {
             val actionId = mDb.taskActionsDao().insertAction(
                 TaskActionsTable(
@@ -326,12 +388,23 @@ class TransportListFragment : Fragment(), TransportListAdapter.RowClickListener 
         }
     }
 
-    private fun loadListData() {
+    private fun loadList() {
         mBinding.transportListList.layoutManager = LinearLayoutManager(context)
         mBinding.transportListList.adapter = TransportListAdapter(
             requireContext(),
             mTransportList,
             this
         )
+
+        mBinding.transportListProgressBar.visibility = View.GONE
+        mBinding.transportListStatusMessage.text = ""
+    }
+
+    override fun onLeftClicked() {
+        mLockDialog.dismiss()
+    }
+
+    override fun onRightClicked() {
+        mLockDialog.dismiss()
     }
 }

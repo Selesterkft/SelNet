@@ -17,6 +17,7 @@ import hu.selester.seltransport.MainActivity
 import hu.selester.seltransport.R
 import hu.selester.seltransport.database.SelTransportDatabase
 import hu.selester.seltransport.database.tables.AddressesTable
+import hu.selester.seltransport.database.tables.SignaturesTable
 import hu.selester.seltransport.databinding.FrgSignatureBinding
 import hu.selester.seltransport.threads.UploadFilesThread
 import hu.selester.seltransport.utils.AppUtils
@@ -27,7 +28,7 @@ import java.io.OutputStream
 
 
 class SignatureFragment : Fragment() {
-    private lateinit var myBitmap: Bitmap
+    private lateinit var mBitmap: Bitmap
     private lateinit var mBinding: FrgSignatureBinding
     private lateinit var mDb: SelTransportDatabase
     private lateinit var mAddress: AddressesTable
@@ -38,9 +39,10 @@ class SignatureFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val activity = requireActivity() as MainActivity
-        activity.title = "Aláírás"
+        activity.title = getString(R.string.signature)
         activity.showTitleIcons()
-        mDb = SelTransportDatabase.getInstance(requireContext())!!
+
+        mDb = SelTransportDatabase.getInstance(requireContext())
         mBinding = FrgSignatureBinding.inflate(inflater)
 
         mBinding.signatureClear.setOnClickListener {
@@ -75,14 +77,14 @@ class SignatureFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 saveImageToStorage()
             } else {
-                AppUtils.toastShort(context, "Permission not granted!")
+                AppUtils.toastShort(context, getString(R.string.no_storage_permission))
             }
 
         }
     }
 
     private fun saveImage(bitmap: Bitmap): String {
-        myBitmap = bitmap
+        mBitmap = bitmap
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
                     requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -106,21 +108,24 @@ class SignatureFragment : Fragment() {
         val externalStorageState = Environment.getExternalStorageState()
         if (externalStorageState == Environment.MEDIA_MOUNTED) {
             try {
+                mDb.signaturesDao().insert(
+                    SignaturesTable(
+                        null,
+                        mAddress.id!!
+                    )
+                )
                 val file = File("", "")
                 val stream: OutputStream = FileOutputStream(file)
-                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
                 stream.close()
-                AppUtils.toast(
-                    context,
-                    "Signature saved to ${Uri.parse(file.absolutePath)}!"
-                )
-                requireView().signature_view.clearCanvas()
+                mBinding.signatureView.clearCanvas()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             UploadFilesThread(this.requireContext()).run()
         }
+        requireActivity().onBackPressed()
         return ""
     }
 }
